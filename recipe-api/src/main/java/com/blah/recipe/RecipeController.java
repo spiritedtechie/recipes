@@ -18,20 +18,8 @@ public class RecipeController {
     @RequestMapping(value = "/recipe/default", method = RequestMethod.GET)
     public Recipe getRecipe() {
         LOGGER.info("Returning default recipe");
-        return defaultRecipe();
+        return DefaultRecipe.build();
     }
 
-    private Recipe defaultRecipe() {
-        var quantity = new Quantity(2, Unit.PORTION);
-        var ingredient = new Ingredient("Eggs", quantity, Optional.empty());
 
-        var instructions = new Instructions();
-        instructions.addNextStep("Heat a small pan of water till boiling");
-        instructions.addNextStep("Using tablespoon, lower egg(s) into boiling water");
-        instructions.addNextStep("Turn heat down to simmer and cook egg(s) for 8 minutes");
-        instructions.addNextStep("Remove eggs using tablespoon and allow to cool for 5 minutes");
-        instructions.addNextStep("Crack shell of eggs with a spoon and peel off all egg shell");
-
-        return new Recipe("Boiled eggs", Set.of(ingredient), instructions);
-    }
 }
