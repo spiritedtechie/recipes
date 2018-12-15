@@ -2,10 +2,8 @@ package com.blah.recipe.repository;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.DeleteTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.blah.DynamoDBTestConfig;
+import com.blah.config.DynamoDBTestConfig;
 import com.blah.recipe.model.*;
 import org.junit.After;
 import org.junit.Before;
@@ -15,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {RecipeRepository.class, DynamoDBTestConfig.class})
-public class RecipeRepositoryTest {
+public class RecipeRepositoryIntegrationTest {
 
     @Autowired
     private AmazonDynamoDB amazonDynamoDB;
@@ -42,19 +38,23 @@ public class RecipeRepositoryTest {
     }
 
     private void createTable() {
-        CreateTableRequest createTableRequest = dynamoDBMapper.generateCreateTableRequest(Recipe.class);
-        createTableRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+        var provisionedThroughput = new ProvisionedThroughput(1L, 1L);
+        var createTableRequest = dynamoDBMapper.generateCreateTableRequest(Recipe.class);
+        createTableRequest.setProvisionedThroughput(provisionedThroughput);
+        createTableRequest.getGlobalSecondaryIndexes().forEach(
+                index -> index.setProvisionedThroughput(provisionedThroughput));
+
         amazonDynamoDB.createTable(createTableRequest);
     }
 
     private void deleteTable() {
-        DeleteTableRequest createTableRequest = dynamoDBMapper.generateDeleteTableRequest(Recipe.class);
+        var createTableRequest = dynamoDBMapper.generateDeleteTableRequest(Recipe.class);
         amazonDynamoDB.deleteTable(createTableRequest);
     }
 
     @Test
     public void testRepositorySavesWithId() {
-        Recipe recipe = DefaultRecipe.build();
+        var recipe = DefaultRecipe.build();
 
         repository.save(recipe);
 
@@ -63,11 +63,11 @@ public class RecipeRepositoryTest {
 
     @Test
     public void testRepositorySavesAllData() {
-        Recipe testRecipe = DefaultRecipe.build();
+        var testRecipe = DefaultRecipe.build();
 
         repository.save(testRecipe);
 
-        Optional<Recipe> savedRecipe = repository.findById(testRecipe.getId());
+        var savedRecipe = repository.findById(testRecipe.getId());
         assertThat(savedRecipe).isPresent();
         assertThat(savedRecipe).hasValueSatisfying(recipe -> {
             assertThat(recipe.getName()).isEqualTo("Boiled eggs");
@@ -84,6 +84,17 @@ public class RecipeRepositoryTest {
                     "Crack shell of eggs with a spoon and peel off all egg shell"
             );
         });
+    }
+
+    @Test
+    public void testFindByName() {
+        var testRecipe = DefaultRecipe.build();
+        repository.save(testRecipe);
+
+        var results = repository.findByName("Boiled eggs");
+
+        assertThat(results).isNotEmpty();
+        assertThat(results).first().hasFieldOrPropertyWithValue("name", "Boiled eggs");
     }
 
 }

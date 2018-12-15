@@ -1,6 +1,0 @@
-mvn clean package
-mvn clean package spring-boot:repackage
-mvn spring-boot:run
-
-docker build -t recipe-api .
-docker run -p 8080:8080 -d recipe-api
