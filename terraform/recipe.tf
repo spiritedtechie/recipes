@@ -96,7 +96,7 @@ resource "aws_iam_policy" "dynamodb-recipe-table-access" {
   policy      = "${data.aws_iam_policy_document.dynamodb-recipe-table-access.json}"
 }
 
-resource "aws_iam_policy_attachment" "recipe-api-user" {
+resource "aws_iam_policy_attachment" "dynamodb-recipe-table-access" {
   name       = "attachments-dynamodb-recipe-rw"
   users      = ["${aws_iam_user.recipe-api.name}"]
   policy_arn = "${aws_iam_policy.dynamodb-recipe-table-access.arn}"
