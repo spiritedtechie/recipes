@@ -15,43 +15,6 @@ resource "aws_default_security_group" "recipe-vpc" {
   }
 }
 
-resource "aws_security_group" "public_recipe" {
-  name = "public-recipe"
-  description = "Recipe public access security group"
-  vpc_id = "${aws_vpc.recipe.id}"
-
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = [
-      "0.0.0.0/0"
-    ]
-  }
-
-  ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
-    cidr_blocks = [
-      "0.0.0.0/0"
-    ]
-  }
-
-  ingress {
-    from_port = 8080
-    to_port = 8080
-    protocol = "tcp"
-    cidr_blocks = [
-      "0.0.0.0/0"
-    ]
-  }
-
-  tags {
-    Name = "sg-public-recipe"
-  }
-}
-
 // range 10.0.10.1 to 10.0.10.254
 resource "aws_subnet" "public-0-recipe-vpc" {
   vpc_id = "${aws_vpc.recipe.id}"
