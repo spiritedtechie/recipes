@@ -6,4 +6,4 @@ export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key --profile
 docker run -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
            -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
            -p 8080:8080 \
-           -d recipe-api
+           -d 274158739358.dkr.ecr.eu-west-1.amazonaws.com/recipe-api

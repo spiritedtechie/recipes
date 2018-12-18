@@ -1,5 +1,6 @@
 FROM adoptopenjdk/openjdk11:latest
 RUN mkdir /opt/app
-COPY target/recipe-api-1.0-SNAPSHOT.jar /opt/app
-CMD ["java", "-jar", "/opt/app/recipe-api-1.0-SNAPSHOT.jar"]
+ARG JAR_FILE
+COPY target/${JAR_FILE} /opt/app/recipe-api.jar
+CMD ["java", "-jar", "/opt/app/recipe-api.jar"]
 EXPOSE 8080
