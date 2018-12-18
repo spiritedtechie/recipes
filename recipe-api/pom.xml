@@ -81,13 +81,14 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-core</artifactId>
-            <version>1.11.301</version>
+            <version>1.11.470</version>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-dynamodb</artifactId>
-            <version>1.11.301</version>
+            <version>1.11.470</version>
         </dependency>
+
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>DynamoDBLocal</artifactId>
@@ -225,8 +226,25 @@
                     <execution>
                         <goals>
                             <goal>build</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>tag-version</id>
+                        <goals>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <tag>${project.version}</tag>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>push-version</id>
+                        <goals>
                             <goal>push</goal>
                         </goals>
+                        <configuration>
+                            <tag>${project.version}</tag>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>tag-latest</id>
@@ -238,12 +256,12 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>tag-version</id>
+                        <id>push-latest</id>
                         <goals>
-                            <goal>tag</goal>
+                            <goal>push</goal>
                         </goals>
                         <configuration>
-                            <tag>${project.version}</tag>
+                            <tag>latest</tag>
                         </configuration>
                     </execution>
                 </executions>
