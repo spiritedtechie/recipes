@@ -10,11 +10,11 @@ resource "aws_alb" "recipe" {
   }
 }
 
-resource "aws_alb_target_group" "recipe" {
-  name                = "alb-target-group-recipe"
+resource "aws_alb_target_group" "recipe-8080" {
   port                = "8080"
   protocol            = "HTTP"
   vpc_id              = "${aws_vpc.recipe.id}"
+  target_type         = "ip"
 
   health_check {
     healthy_threshold   = "5"
@@ -28,18 +28,22 @@ resource "aws_alb_target_group" "recipe" {
   }
 
   tags {
-    Name = "alb-target-group-recipe"
+    Name = "alb-target-group-8080-recipe"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
 # Redirect all traffic from the ALB to the target group
-resource "aws_alb_listener" "alb-listener" {
+resource "aws_alb_listener" "alb-listener-recipe-8080" {
   load_balancer_arn = "${aws_alb.recipe.id}"
   port              = "8080"
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = "${aws_alb_target_group.recipe.id}"
+    target_group_arn = "${aws_alb_target_group.recipe-8080.id}"
     type             = "forward"
   }
 }
