@@ -95,8 +95,8 @@ resource "aws_ecs_task_definition" "recipe-api" {
   container_definitions    = "${data.template_file.recipe-api-task.rendered}"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = 256
-  memory                   = 512
+  cpu                      = 1024
+  memory                   = 2048
   execution_role_arn       = "${aws_iam_role.ecs-execution-role.arn}"
   task_role_arn            = "${aws_iam_role.ecs-recipe-api-task-role.arn}"
   depends_on = [
