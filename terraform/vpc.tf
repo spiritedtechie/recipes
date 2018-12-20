@@ -10,6 +10,7 @@ resource "aws_vpc" "recipe" {
 
 resource "aws_default_security_group" "recipe-vpc" {
   vpc_id = "${aws_vpc.recipe.id}"
+
   tags {
     Name = "sg-default-recipe-vpc"
   }

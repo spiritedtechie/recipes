@@ -1,7 +1,7 @@
 /*
 * IAM ECS roles
 */
-data "aws_iam_policy_document" "ecs-execution-role" {
+data "aws_iam_policy_document" "ecs-task-policy" {
   statement {
     effect = "Allow"
     actions = ["sts:AssumeRole"]
@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "ecs-execution-role" {
 
 resource "aws_iam_role" "ecs-execution-role" {
   name               = "ecs-task-execution-role"
-  assume_role_policy = "${data.aws_iam_policy_document.ecs-execution-role.json}"
+  assume_role_policy = "${data.aws_iam_policy_document.ecs-task-policy.json}"
 }
 
 data "aws_iam_policy_document" "ecs-execution-policy" {
@@ -34,13 +34,18 @@ data "aws_iam_policy_document" "ecs-execution-policy" {
 
 resource "aws_iam_role_policy" "ecs-execution-role-ecs-policy" {
   name   = "ecs-execution-role-ecs-policy"
-  policy = "${data.aws_iam_policy_document.ecs-execution-policy.json}"
   role   = "${aws_iam_role.ecs-execution-role.id}"
+  policy = "${data.aws_iam_policy_document.ecs-execution-policy.json}"
 
 }
 
-resource "aws_iam_role_policy_attachment" "ecs-execution-role-dynamo-policy" {
-  role       = "${aws_iam_role.ecs-execution-role.name}"
+resource "aws_iam_role" "ecs-recipe-api-task-role" {
+  name               = "ecs-recipe-api-task-role"
+  assume_role_policy = "${data.aws_iam_policy_document.ecs-task-policy.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "ecs-recipe-api-task-role-policy" {
+  role = "${aws_iam_role.ecs-recipe-api-task-role.id}"
   policy_arn = "${aws_iam_policy.dynamodb-recipe-table-access.arn}"
 }
 
@@ -80,7 +85,6 @@ data "template_file" "recipe-api-task" {
   template = "${file("${path.module}/tasks/recipe_api_task_definition.json")}"
 
   vars {
-    cpu    = 1
     name   = "recipe-api"
     image  = "${data.aws_ecr_repository.recipe-api.repository_url}"
   }
@@ -94,6 +98,7 @@ resource "aws_ecs_task_definition" "recipe-api" {
   cpu                      = 256
   memory                   = 512
   execution_role_arn       = "${aws_iam_role.ecs-execution-role.arn}"
+  task_role_arn            = "${aws_iam_role.ecs-recipe-api-task-role.arn}"
   depends_on = [
     "aws_iam_role.ecs-execution-role"
   ]
