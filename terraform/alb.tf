@@ -17,8 +17,8 @@ resource "aws_alb_target_group" "recipe-8080" {
   target_type         = "ip"
 
   health_check {
-    healthy_threshold   = "5"
-    unhealthy_threshold = "2"
+    healthy_threshold   = "3"
+    unhealthy_threshold = "3"
     interval            = "30"
     matcher             = "200"
     path                = "/actuator/health"
@@ -29,10 +29,6 @@ resource "aws_alb_target_group" "recipe-8080" {
 
   tags {
     Name = "alb-target-group-8080-recipe"
-  }
-
-  lifecycle {
-    create_before_destroy = true
   }
 }
 
