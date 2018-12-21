@@ -117,7 +117,8 @@ resource "aws_ecs_service" "recipe-api" {
 
   network_configuration {
     security_groups = ["${aws_security_group.ecs-recipe.id}"]
-    subnets         = ["${aws_subnet.private-1-recipe-vpc.id}", "${aws_subnet.private-3-recipe-vpc.id}"]
+    subnets         = ["${aws_subnet.public-0-recipe-vpc.id}", "${aws_subnet.public-2-recipe-vpc.id}"]
+    assign_public_ip = true
   }
 
   load_balancer {

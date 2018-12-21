@@ -63,49 +63,6 @@ resource "aws_internet_gateway" "recipe-vpc" {
   }
 }
 
-# Nat gateway to allow private subnets to communicate out to the internet
-resource "aws_eip" "subnet-public-0" {
-  vpc = true
-  depends_on = [
-    "aws_internet_gateway.recipe-vpc"
-  ]
-  tags {
-    Name = "eip-subnet-public-0-recipe-vpc"
-  }
-}
-
-resource "aws_eip" "subnet-public-2" {
-  vpc = true
-  depends_on = [
-    "aws_internet_gateway.recipe-vpc"
-  ]
-  tags {
-    Name = "eip-subnet-public-2-recipe-vpc"
-  }
-}
-
-resource "aws_nat_gateway" "in-subnet-public-0-recipe-vpc" {
-  allocation_id = "${aws_eip.subnet-public-0.id}"
-  subnet_id = "${aws_subnet.public-0-recipe-vpc.id}"
-  depends_on = [
-    "aws_internet_gateway.recipe-vpc"
-  ]
-  tags {
-    Name = "nat-gw-in-subnet-public-0-recipe-vpc"
-  }
-}
-
-resource "aws_nat_gateway" "in-subnet-public-2-recipe-vpc" {
-  allocation_id = "${aws_eip.subnet-public-2.id}"
-  subnet_id = "${aws_subnet.public-2-recipe-vpc.id}"
-  depends_on = [
-    "aws_internet_gateway.recipe-vpc"
-  ]
-  tags {
-    Name = "nat-gw-in-subnet-public-2-recipe-vpc"
-  }
-}
-
 resource "aws_route_table" "recipe-public-subnets" {
   vpc_id = "${aws_vpc.recipe.id}"
   route {
@@ -113,7 +70,7 @@ resource "aws_route_table" "recipe-public-subnets" {
     gateway_id = "${aws_internet_gateway.recipe-vpc.id}"
   }
   tags {
-    Name = "route-table-public-recipe-vpc"
+    Name = "route-table-public-subnets-recipe-vpc"
   }
 }
 
@@ -130,27 +87,27 @@ resource "aws_route_table_association" "public-rt-to-subnet2" {
 resource "aws_route_table" "private-subnet-1-recipe-vpc" {
   vpc_id = "${aws_vpc.recipe.id}"
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    nat_gateway_id = "${aws_nat_gateway.in-subnet-public-0-recipe-vpc.id}"
-  }
-
   tags {
-    Name = "route_table_private-subnet-1-recipe-vpc"
+    Name = "route-table-private-subnet-1-recipe-vpc"
   }
 }
 
 resource "aws_route_table" "private-subnet-3-recipe-vpc" {
   vpc_id = "${aws_vpc.recipe.id}"
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    nat_gateway_id = "${aws_nat_gateway.in-subnet-public-2-recipe-vpc.id}"
-  }
-
   tags {
-    Name = "route_table_private-subnet-3-recipe-vpc"
+    Name = "route-table-private-subnet-3-recipe-vpc"
   }
+}
+
+resource "aws_vpc_endpoint" "dynamodb" {
+  vpc_id       = "${aws_vpc.recipe.id}"
+  service_name = "com.amazonaws.eu-west-1.dynamodb"
+  route_table_ids = [
+    "${aws_route_table.private-subnet-1-recipe-vpc.id}",
+    "${aws_route_table.private-subnet-3-recipe-vpc.id}",
+    "${aws_route_table.recipe-public-subnets.id}",
+  ]
 }
 
 resource "aws_route_table_association" "private-rt-to-subnet1" {
@@ -162,3 +119,5 @@ resource "aws_route_table_association" "private-rt-to-subnet3" {
   subnet_id = "${aws_subnet.private-3-recipe-vpc.id}"
   route_table_id = "${aws_route_table.private-subnet-3-recipe-vpc.id}"
 }
+
+
