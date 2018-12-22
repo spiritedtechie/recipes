@@ -1,7 +1,7 @@
-resource "aws_security_group" "public_recipe" {
-  name = "public-recipe"
+resource "aws_security_group" "public_recipes" {
+  name = "public-recipes"
   description = "Recipe public access security group"
-  vpc_id = "${aws_vpc.recipe.id}"
+  vpc_id = "${aws_vpc.recipes.id}"
 
   ingress {
     from_port = 22
@@ -38,10 +38,10 @@ resource "aws_security_group" "public_recipe" {
   }
 
   tags {
-    Name = "sg-public-recipe"
+    Name = "sg-public-recipes"
   }
 
   depends_on = [
-    "aws_vpc.recipe"
+    "aws_vpc.recipes"
   ]
 }

@@ -1,6 +1,6 @@
 # Create a DynamoDB table
-resource "aws_dynamodb_table" "recipe" {
-  name           = "Recipe"
+resource "aws_dynamodb_table" "recipes" {
+  name           = "recipes"
   billing_mode   = "PAY_PER_REQUEST"
   read_capacity  = 0
   write_capacity = 0
@@ -17,7 +17,7 @@ resource "aws_dynamodb_table" "recipe" {
   }
 
   tags = {
-    Name        = "dynamodb-table-recipe"
+    Name        = "dynamodb-table-recipes"
     Environment = "production"
   }
 

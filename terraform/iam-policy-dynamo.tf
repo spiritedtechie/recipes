@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "dynamodb-recipe-table-access" {
+data "aws_iam_policy_document" "dynamodb-recipes-table-access" {
   statement {
     actions = [
       "dynamodb:BatchGet*",
@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "dynamodb-recipe-table-access" {
     ]
 
     resources = [
-      "${aws_dynamodb_table.recipe.arn}",
+      "${aws_dynamodb_table.recipes.arn}",
     ]
   }
 
@@ -24,14 +24,14 @@ data "aws_iam_policy_document" "dynamodb-recipe-table-access" {
     ]
 
     resources = [
-      "${aws_dynamodb_table.recipe.arn}/index/*",
+      "${aws_dynamodb_table.recipes.arn}/index/*",
     ]
   }
 }
 
-resource "aws_iam_policy" "dynamodb-recipe-table-access" {
-  name        = "policy-dynamodb-recipe-rw"
+resource "aws_iam_policy" "dynamodb-recipes-table-access" {
+  name        = "policy-dynamodb-recipes-rw"
   path        = "/recipe/"
   description = "Read/write to Recipe table"
-  policy      = "${data.aws_iam_policy_document.dynamodb-recipe-table-access.json}"
+  policy      = "${data.aws_iam_policy_document.dynamodb-recipes-table-access.json}"
 }

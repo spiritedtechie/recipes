@@ -14,7 +14,7 @@
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
-        "awslogs-group": "recipe",
+        "awslogs-group": "recipes",
         "awslogs-region": "eu-west-1",
         "awslogs-stream-prefix": "${name}"
       }

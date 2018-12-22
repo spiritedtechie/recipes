@@ -1,7 +1,7 @@
-resource "aws_cloudwatch_log_group" "recipe" {
-  name = "recipe"
+resource "aws_cloudwatch_log_group" "recipes" {
+  name = "recipes"
   retention_in_days = 1
   tags = {
-    Name = "cloudwatch-log-group-recipe"
+    Name = "cloudwatch-log-group-recipes"
   }
 }

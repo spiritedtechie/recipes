@@ -1,6 +1,6 @@
-Add AWS credentials to ~/.aws/credentials under a profile named 'recipe-deployer'.
+Add AWS credentials to ~/.aws/credentials under a profile named 'recipes-deployer'.
 
-    [recipe-deployer]
+    [recipes-deployer]
     aws_access_key_id = blah
     aws_secret_access_key = blah
     region=eu-west-1
