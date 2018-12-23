@@ -24,5 +24,17 @@ services:
     depends_on:
       - api
 
+  grafana:
+    build: ./grafana
+    volumes:
+      - grafana:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    links:
+      - prometheus
+    depends_on:
+      - prometheus
+
 volumes:
   prometheus:
+  grafana:
