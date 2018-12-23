@@ -11,6 +11,8 @@ services:
     ports:
       - "8080:8080"
   prometheus:
-    image: "prom/prometheus"
+    build: ./prometheus
     ports:
       - "9090:9090"
+    links:
+      - api:recipe-api
