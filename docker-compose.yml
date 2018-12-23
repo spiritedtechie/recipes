@@ -1,5 +1,7 @@
 version: '3'
+
 services:
+
   api:
     build:
       context: ./recipes_api
@@ -10,9 +12,17 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     ports:
       - "8080:8080"
+
   prometheus:
     build: ./prometheus
+    volumes:
+      - prometheus:/prometheus
     ports:
       - "9090:9090"
     links:
       - api:recipe-api
+    depends_on:
+      - api
+
+volumes:
+  prometheus:
