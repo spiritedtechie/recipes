@@ -3,6 +3,7 @@ package com.blah.recipes.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -45,6 +46,7 @@ public class Ingredient {
     }
 
     @DynamoDBIgnore
+    @JsonIgnore
     public Optional<Preparation> getPreparationSafe() {
         return preparation;
     }

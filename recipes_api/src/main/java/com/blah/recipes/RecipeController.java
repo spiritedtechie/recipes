@@ -32,10 +32,11 @@ public class RecipeController {
     }
 
     private void addDefaultRecipeToDatabaseIfNotAlreadyThere() {
-        var recipes = this.recipeRepository.findByName("Boiled eggs");
+        Recipe recipe = DefaultRecipe.build();
+        var recipes = this.recipeRepository.findByName(recipe.getName());
         if (recipes.isEmpty()) {
             LOGGER.info("Default recipe not found. Adding to the database.");
-            this.recipeRepository.save(DefaultRecipe.build());
+            this.recipeRepository.save(recipe);
         }
     }
 }

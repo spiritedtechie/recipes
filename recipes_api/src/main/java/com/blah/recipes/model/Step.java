@@ -3,6 +3,7 @@ package com.blah.recipes.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -40,16 +41,18 @@ public class Step {
     }
 
     @DynamoDBIgnore
+    @JsonIgnore
     public Optional<String> getImageUriSafe() {
         return imageUri;
     }
 
     @DynamoDBAttribute
-    private String getVideoUri() {
+    public String getVideoUri() {
         return videoUri.orElse(null);
     }
 
     @DynamoDBIgnore
+    @JsonIgnore
     public Optional<String> getVideoUriSafe() {
         return videoUri;
     }
