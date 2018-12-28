@@ -33,6 +33,6 @@ public class RecipeProductionSmokeTest {
 
         LOGGER.info("Json returned: " + recipesJson);
 
-        assertThat(recipesJson).contains("Boiled eggs");
+        assertThat(recipesJson).contains("Cheese Omlette");
     }
 }

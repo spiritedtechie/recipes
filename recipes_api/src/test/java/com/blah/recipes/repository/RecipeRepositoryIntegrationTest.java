@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static com.blah.recipes.model.Quantity.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -69,21 +70,7 @@ public class RecipeRepositoryIntegrationTest {
 
         var savedRecipe = repository.findById(testRecipe.getId());
         assertThat(savedRecipe).isPresent();
-        assertThat(savedRecipe).hasValueSatisfying(recipe -> {
-            assertThat(recipe.getName()).isEqualTo("Boiled eggs");
-
-            assertThat(recipe.getIngredients()).hasSize(1);
-            assertThat(recipe.getIngredients()).contains(new Ingredient("Eggs", new Quantity(2, Unit.PORTION)));
-
-            assertThat(recipe.getInstructions().getSteps()).hasSize(5);
-            assertThat(recipe.getInstructions().getSteps()).containsExactlyInAnyOrder(
-                    "Heat a small pan of water till boiling",
-                    "Using tablespoon, lower egg(s) into boiling water",
-                    "Turn heat down to simmer and cook egg(s) for 8 minutes",
-                    "Remove eggs using tablespoon and allow to cool for 5 minutes",
-                    "Crack shell of eggs with a spoon and peel off all egg shell"
-            );
-        });
+        assertThat(savedRecipe).get().isEqualTo(testRecipe);
     }
 
     @Test
@@ -91,10 +78,10 @@ public class RecipeRepositoryIntegrationTest {
         var testRecipe = DefaultRecipe.build();
         repository.save(testRecipe);
 
-        var results = repository.findByName("Boiled eggs");
+        var results = repository.findByName("Cheese Omlette");
 
         assertThat(results).isNotEmpty();
-        assertThat(results).first().hasFieldOrPropertyWithValue("name", "Boiled eggs");
+        assertThat(results).first().hasFieldOrPropertyWithValue("name", "Cheese Omlette");
     }
 
 }

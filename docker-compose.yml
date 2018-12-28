@@ -35,6 +35,8 @@ services:
     depends_on:
       - prometheus
 
+# The volumes are used to store the state across container instances
+# i.e. so we don't lose metrics data if a container instance is destroyed and rebuilt
 volumes:
   prometheus:
   grafana:

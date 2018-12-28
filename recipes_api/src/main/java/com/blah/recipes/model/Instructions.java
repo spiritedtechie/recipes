@@ -10,25 +10,21 @@ import java.util.Objects;
 @DynamoDBDocument
 public class Instructions {
 
-    private List<String> steps = new LinkedList<>();
+    private List<Step> steps = new LinkedList<>();
 
     public Instructions() {
     }
 
-    public void addStep(Integer stepPosition, String details) {
-        steps.add(stepPosition, details);
-    }
-
-    public void addNextStep(String details) {
-        steps.add(details);
+    public void addNextStep(Step step) {
+        steps.add(step);
     }
 
     @DynamoDBAttribute
-    public List<String> getSteps() {
+    public List<Step> getSteps() {
         return steps;
     }
 
-    public void setSteps(List<String> steps) {
+    public void setSteps(List<Step> steps) {
         this.steps = steps;
     }
 

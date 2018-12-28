@@ -35,7 +35,7 @@ public class RecipeControllerIntegrationTest {
 
         mvc.perform(get("/recipes"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].name", is("Boiled eggs")));
+                .andExpect(jsonPath("$.[0].name", is("Cheese Omlette")));
     }
 
 }

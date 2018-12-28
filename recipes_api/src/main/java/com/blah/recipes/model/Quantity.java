@@ -9,6 +9,16 @@ import java.util.Objects;
 @DynamoDBDocument
 public class Quantity {
 
+    public enum Unit {
+        SMALL, MEDIUM, LARGE,
+        WHOLE,
+        CUP,
+        TEASPOON, TABLESPOON,
+        KILOGRAMS, GRAMS,
+        SPRINKLE, PINCH,
+        INCHES
+    }
+
     private Integer value;
 
     private Unit unit;
