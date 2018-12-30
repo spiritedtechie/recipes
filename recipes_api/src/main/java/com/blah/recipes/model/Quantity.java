@@ -3,6 +3,7 @@ package com.blah.recipes.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
@@ -32,20 +33,24 @@ public class Quantity {
     }
 
     @DynamoDBAttribute
+    @JsonProperty
     public Integer getValue() {
         return value;
     }
 
-    @DynamoDBAttribute
-    @DynamoDBTypeConvertedEnum
-    public Unit getUnit() {
-        return unit;
-    }
-
+    @JsonProperty
     public void setValue(Integer value) {
         this.value = value;
     }
 
+    @DynamoDBAttribute
+    @DynamoDBTypeConvertedEnum
+    @JsonProperty
+    public Unit getUnit() {
+        return unit;
+    }
+
+    @JsonProperty
     public void setUnit(Unit unit) {
         this.unit = unit;
     }

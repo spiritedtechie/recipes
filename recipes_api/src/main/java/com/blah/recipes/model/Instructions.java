@@ -2,6 +2,7 @@ package com.blah.recipes.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,10 +21,12 @@ public class Instructions {
     }
 
     @DynamoDBAttribute
+    @JsonProperty
     public List<Step> getSteps() {
         return steps;
     }
 
+    @JsonProperty
     public void setSteps(List<Step> steps) {
         this.steps = steps;
     }

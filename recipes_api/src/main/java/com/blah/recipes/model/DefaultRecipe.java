@@ -1,5 +1,6 @@
 package com.blah.recipes.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.blah.recipes.model.Preparation.Method;
@@ -8,7 +9,24 @@ import static com.blah.recipes.model.Quantity.Unit;
 
 public class DefaultRecipe {
 
-    public static Recipe build() {
+    private List<Ingredient> ingredients = new ArrayList<>();
+    private String id;
+
+    public static DefaultRecipe getInstance() {
+        return new DefaultRecipe();
+    }
+
+    public DefaultRecipe withId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    public DefaultRecipe withIngedient(Ingredient ingedient) {
+        this.ingredients.add(ingedient);
+        return this;
+    }
+
+    public Recipe build() {
         var oilQuantity = new Quantity(1, Unit.TABLESPOON);
         var oil = new Ingredient("Olive Oil", oilQuantity);
 
@@ -28,6 +46,13 @@ public class DefaultRecipe {
         instructions.addNextStep(new Step("Add cheese over omlette and allow to melt"));
         instructions.addNextStep(new Step("Flip over half of omlette over itself to serve"));
 
-        return new Recipe("Cheese Omlette", List.of(oil, eggs, cheese), instructions);
+        this.ingredients.add(oil);
+        this.ingredients.add(eggs);
+        this.ingredients.add(cheese);
+
+        Recipe recipe = new Recipe("Cheese Omlette", this.ingredients, instructions);
+        recipe.setId(this.id);
+
+        return recipe;
     }
 }

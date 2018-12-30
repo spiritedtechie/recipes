@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -31,38 +32,46 @@ public class Ingredient {
     }
 
     @DynamoDBAttribute
+    @JsonProperty
     public String getName() {
         return name;
     }
 
-    @DynamoDBAttribute
-    public Quantity getQuantity() {
-        return quantity;
-    }
-
-    @DynamoDBAttribute
-    public Preparation getPreparation() {
-        return preparation.orElse(null);
-    }
-
-    @DynamoDBIgnore
-    @JsonIgnore
-    public Optional<Preparation> getPreparationSafe() {
-        return preparation;
-    }
-
+    @JsonProperty
     public void setName(String name) {
         this.name = name;
     }
 
+    @DynamoDBAttribute
+    @JsonProperty
+    public Quantity getQuantity() {
+        return quantity;
+    }
+
+    @JsonProperty
     public void setQuantity(Quantity quantity) {
         this.quantity = quantity;
     }
 
+    @DynamoDBAttribute
+    @JsonIgnore
+    public Preparation getPreparation() {
+        return preparation.orElse(null);
+    }
+
+    @DynamoDBAttribute
+    @JsonIgnore
     public void setPreparation(Preparation preparation) {
         this.setPreparation(Optional.ofNullable(preparation));
     }
 
+    @DynamoDBIgnore
+    @JsonProperty("preparation")
+    public Optional<Preparation> getPreparationSafe() {
+        return preparation;
+    }
+
+    @JsonProperty
     public void setPreparation(Optional<Preparation> preparation) {
         this.preparation = preparation;
     }
