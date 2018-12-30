@@ -72,6 +72,16 @@ public class RecipeControllerIntegrationTest {
     }
 
     @Test
+    public void testGetRecipeNotFound() throws Exception {
+        when(recipeRepository.findById("1234")).thenReturn(Optional.empty());
+
+        var resultActions = mvc.perform(get("/recipes/1234"));
+
+        verify(recipeRepository).findById("1234");
+        resultActions.andExpect(status().isNotFound());
+    }
+
+    @Test
     public void testNewRecipe() throws Exception {
         var recipe = DefaultRecipe.getInstance().build();
         var recipeJson = om.writeValueAsString(recipe);

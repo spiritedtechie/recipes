@@ -32,10 +32,10 @@ public class RecipeController {
 
     @RequestMapping(value = "/recipes/{id}", method = RequestMethod.GET)
     @Timed(value = "recipes.all", percentiles = {0.5, 0.95, 0.999}, histogram = true)
-    public Optional<Recipe> getRecipe(@PathVariable String id) {
+    public Recipe getRecipe(@PathVariable String id) {
         LOGGER.info("getRecipe " + id);
 
-        return recipeRepository.findById(id);
+        return recipeRepository.findById(id).orElseThrow(() -> new RecipeNotFoundException(id));
     }
 
     @RequestMapping(value = "/recipes/default", method = RequestMethod.POST)
