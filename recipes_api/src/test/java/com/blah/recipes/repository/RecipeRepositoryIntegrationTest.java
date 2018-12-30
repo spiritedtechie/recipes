@@ -2,9 +2,12 @@ package com.blah.recipes.repository;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.model.Projection;
+import com.amazonaws.services.dynamodbv2.model.ProjectionType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.blah.config.DynamoDBTestConfig;
-import com.blah.recipes.model.*;
+import com.blah.recipes.model.DefaultRecipe;
+import com.blah.recipes.model.Recipe;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.blah.recipes.model.Quantity.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -56,17 +58,29 @@ public class RecipeRepositoryIntegrationTest {
     }
 
     @Test
-    public void testRepositorySavesWithId() {
-        var recipe = DefaultRecipe.build();
+    public void testRepositorySavesGeneratingNewId() {
+        var recipe = DefaultRecipe.getInstance().build();
+
+        Recipe saved = repository.save(recipe);
+
+        assertThat(saved.getId()).isNotNull();
+    }
+
+    @Test
+    public void testRepositorySavesWithExistingId() {
+        String id = "12345";
+        var recipe = DefaultRecipe.getInstance().withId(id).build();
 
         repository.save(recipe);
 
-        assertThat(recipe.getId()).isNotNull();
+        var result = repository.findById(id);
+        assertThat(result).isNotEmpty();
+        assertThat(result).get().hasFieldOrPropertyWithValue("id", id);
     }
 
     @Test
     public void testRepositorySavesAllData() {
-        var testRecipe = DefaultRecipe.build();
+        var testRecipe = DefaultRecipe.getInstance().build();
 
         repository.save(testRecipe);
 
@@ -77,13 +91,27 @@ public class RecipeRepositoryIntegrationTest {
 
     @Test
     public void testFindByName() {
-        var testRecipe = DefaultRecipe.build();
+        var testRecipe = DefaultRecipe.getInstance().build();
         repository.save(testRecipe);
 
         var results = repository.findByName("Cheese Omlette");
 
         assertThat(results).isNotEmpty();
         assertThat(results).first().isEqualTo(testRecipe);
+    }
+
+    @Test
+    public void testDeleteById() {
+        String id = "12345";
+        var testRecipe = DefaultRecipe.getInstance().withId(id).build();
+        repository.save(testRecipe);
+        var savedRecipe = repository.findById(id);
+        assertThat(savedRecipe).isNotEmpty();
+
+        repository.deleteById(id);
+
+        var result = repository.findById(testRecipe.getId());
+        assertThat(result).isEmpty();
     }
 
 }
