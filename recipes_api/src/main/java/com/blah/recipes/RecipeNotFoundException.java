@@ -1,12 +1,17 @@
 package com.blah.recipes;
 
+import com.blah.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class RecipeNotFoundException extends RuntimeException {
+public class RecipeNotFoundException extends NotFoundException {
 
     public RecipeNotFoundException(String id) {
-        super("Could not find recipe with ID: " + id);
+        super(id);
+    }
+
+    public String getResourceName() {
+        return "Recipe";
     }
 }
