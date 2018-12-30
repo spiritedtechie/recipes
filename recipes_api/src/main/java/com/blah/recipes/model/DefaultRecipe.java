@@ -11,6 +11,7 @@ public class DefaultRecipe {
 
     private List<Ingredient> ingredients = new ArrayList<>();
     private String id;
+    private String name = "Cheese Omlette";
 
     public static DefaultRecipe getInstance() {
         return new DefaultRecipe();
@@ -23,6 +24,11 @@ public class DefaultRecipe {
 
     public DefaultRecipe withIngedient(Ingredient ingedient) {
         this.ingredients.add(ingedient);
+        return this;
+    }
+
+    public DefaultRecipe withName(String name) {
+        this.name = name;
         return this;
     }
 
@@ -50,7 +56,7 @@ public class DefaultRecipe {
         this.ingredients.add(eggs);
         this.ingredients.add(cheese);
 
-        Recipe recipe = new Recipe("Cheese Omlette", this.ingredients, instructions);
+        Recipe recipe = new Recipe(this.name, this.ingredients, instructions);
         recipe.setId(this.id);
 
         return recipe;
