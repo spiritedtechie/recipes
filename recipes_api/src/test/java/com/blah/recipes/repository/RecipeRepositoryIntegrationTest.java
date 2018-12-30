@@ -43,7 +43,9 @@ public class RecipeRepositoryIntegrationTest {
         var createTableRequest = dynamoDBMapper.generateCreateTableRequest(Recipe.class);
         createTableRequest.setProvisionedThroughput(provisionedThroughput);
         createTableRequest.getGlobalSecondaryIndexes().forEach(
-                index -> index.setProvisionedThroughput(provisionedThroughput));
+                index -> index
+                        .withProjection(new Projection().withProjectionType(ProjectionType.ALL))
+                        .withProvisionedThroughput(provisionedThroughput));
 
         amazonDynamoDB.createTable(createTableRequest);
     }
@@ -81,7 +83,7 @@ public class RecipeRepositoryIntegrationTest {
         var results = repository.findByName("Cheese Omlette");
 
         assertThat(results).isNotEmpty();
-        assertThat(results).first().hasFieldOrPropertyWithValue("name", "Cheese Omlette");
+        assertThat(results).first().isEqualTo(testRecipe);
     }
 
 }

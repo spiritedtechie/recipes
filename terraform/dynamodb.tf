@@ -26,6 +26,6 @@ resource "aws_dynamodb_table" "recipes" {
     hash_key           = "name"
     write_capacity     = 0
     read_capacity      = 0
-    projection_type    = "KEYS_ONLY"
+    projection_type    = "ALL"
   }
 }
