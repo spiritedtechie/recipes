@@ -14,6 +14,8 @@ public class Quantity {
         SMALL, MEDIUM, LARGE,
         WHOLE,
         CUP,
+        PINT,
+        MILLILETRE, LITRE,
         TEASPOON, TABLESPOON,
         KILOGRAMS, GRAMS,
         SPRINKLE, PINCH,

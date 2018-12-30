@@ -18,7 +18,9 @@ public class Preparation {
     }
 
     public enum Style {
-        FINE, COURSE
+        FINE, COURSE,
+        THICK, THIN,
+        LIGHT, RIGOROUS
     }
 
     private Method method;
