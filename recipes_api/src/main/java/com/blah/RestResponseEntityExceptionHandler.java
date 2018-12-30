@@ -11,9 +11,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class GenericRestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenericRestResponseEntityExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
 
     @ExceptionHandler(value = {IllegalArgumentException.class})
     protected ResponseEntity<Object> handleBadArgument(RuntimeException ex, WebRequest request) {
