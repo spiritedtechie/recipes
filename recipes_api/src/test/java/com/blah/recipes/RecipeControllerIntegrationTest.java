@@ -29,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(RecipeController.class)
 public class RecipeControllerIntegrationTest {
 
+    private static final String RECIPE_ID = "fba40fa2-70be-4fab-8cd7-2319a20eca9c";
+
     private ArgumentCaptor<Recipe> captor = ArgumentCaptor.forClass(Recipe.class);
 
     @Autowired
@@ -61,11 +63,11 @@ public class RecipeControllerIntegrationTest {
     @Test
     public void testGetRecipe() throws Exception {
         var recipe = DefaultRecipe.getInstance().build();
-        when(recipeRepository.findById("1234")).thenReturn(Optional.of(recipe));
+        when(recipeRepository.findById(RECIPE_ID)).thenReturn(Optional.of(recipe));
 
-        var resultActions = mvc.perform(get("/recipes/1234"));
+        var resultActions = mvc.perform(get("/recipes/" + RECIPE_ID));
 
-        verify(recipeRepository).findById("1234");
+        verify(recipeRepository).findById(RECIPE_ID);
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Cheese Omlette")));
@@ -73,11 +75,11 @@ public class RecipeControllerIntegrationTest {
 
     @Test
     public void testGetRecipeNotFound() throws Exception {
-        when(recipeRepository.findById("1234")).thenReturn(Optional.empty());
+        when(recipeRepository.findById(RECIPE_ID)).thenReturn(Optional.empty());
 
-        var resultActions = mvc.perform(get("/recipes/1234"));
+        var resultActions = mvc.perform(get("/recipes/" + RECIPE_ID));
 
-        verify(recipeRepository).findById("1234");
+        verify(recipeRepository).findById(RECIPE_ID);
         resultActions.andExpect(status().isNotFound());
     }
 
@@ -116,7 +118,7 @@ public class RecipeControllerIntegrationTest {
 
     @Test
     public void testUpdateRecipe() throws Exception {
-        var idToUpdate = "12345";
+        var idToUpdate = RECIPE_ID;
         var recipe = DefaultRecipe.getInstance().build();
         var recipeJson = om.writeValueAsString(recipe);
         var recipeWithId = DefaultRecipe.getInstance().withId(idToUpdate).build();
@@ -140,7 +142,7 @@ public class RecipeControllerIntegrationTest {
 
     @Test
     public void testDeleteRecipe() throws Exception {
-        var idToDelete = "12345";
+        var idToDelete = RECIPE_ID;
         doNothing().when(recipeRepository).deleteById(idToDelete);
 
         var resultActions = mvc.perform(delete(String.format("/recipes/%s", idToDelete)));
