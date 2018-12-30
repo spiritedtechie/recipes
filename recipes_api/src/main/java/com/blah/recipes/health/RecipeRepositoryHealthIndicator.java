@@ -25,9 +25,7 @@ public class RecipeRepositoryHealthIndicator implements HealthIndicator {
     @Override
     public Health health() {
         try {
-            var a = recipeRepository.findByName("Boiled Eggs");
-
-            boolean found = a.isEmpty();
+            var found = recipeRepository.findByName("Boiled Eggs").isEmpty();
             return booleanToHealth.apply(found)
                     .withDetail(DEFAULT_RECIPE_FETCHED_KEY, found)
                     .build();

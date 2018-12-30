@@ -61,7 +61,7 @@ public class RecipeRepositoryIntegrationTest {
     public void testRepositorySavesGeneratingNewId() {
         var recipe = DefaultRecipe.getInstance().build();
 
-        Recipe saved = repository.save(recipe);
+        var saved = repository.save(recipe);
 
         assertThat(saved.getId()).isNotNull();
     }

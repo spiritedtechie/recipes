@@ -38,7 +38,7 @@ public class RecipeController {
     @RequestMapping(value = "/recipes/default", method = RequestMethod.POST)
     public Recipe newDefaultRecipe() {
         LOGGER.info("newDefaultRecipe");
-        Recipe recipe = DefaultRecipe.getInstance().build();
+        var recipe = DefaultRecipe.getInstance().build();
         var recipes = this.recipeRepository.findByName(recipe.getName());
         if (!recipes.isEmpty()) {
             return recipes.get(0);
