@@ -18,7 +18,7 @@ public class Quantity {
         MILLILETRE, LITRE,
         TEASPOON, TABLESPOON,
         KILOGRAMS, GRAMS,
-        SPRINKLE, PINCH,
+        SPRINKLE, PINCH, DASH,
         INCHES
     }
 

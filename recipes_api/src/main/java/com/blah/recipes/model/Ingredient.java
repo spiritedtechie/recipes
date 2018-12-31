@@ -18,14 +18,22 @@ public class Ingredient {
 
     private Optional<Preparation> preparation = Optional.empty();
 
+    private Boolean optional = false;
+
     public Ingredient() {
     }
 
-    public Ingredient(String name, Quantity quantity, Preparation preparation) {
+    public Ingredient(String name, Quantity quantity, Preparation preparation, Boolean optional) {
         this.name = name;
         this.quantity = quantity;
+        this.optional = optional;
         this.preparation = Optional.ofNullable(preparation);
     }
+
+    public Ingredient(String name, Quantity quantity, Preparation preparation) {
+        this(name, quantity, preparation, false);
+    }
+
 
     public Ingredient(String name, Quantity quantity) {
         this(name, quantity, null);
@@ -51,6 +59,17 @@ public class Ingredient {
     @JsonProperty
     public void setQuantity(Quantity quantity) {
         this.quantity = quantity;
+    }
+
+    @DynamoDBAttribute
+    @JsonProperty
+    public Boolean getOptional() {
+        return optional;
+    }
+
+    @JsonProperty
+    public void setOptional(Boolean optional) {
+        this.optional = optional;
     }
 
     @DynamoDBAttribute
@@ -83,12 +102,13 @@ public class Ingredient {
         Ingredient that = (Ingredient) o;
         return Objects.equals(name, that.name) &&
                 Objects.equals(quantity, that.quantity) &&
-                Objects.equals(preparation, that.preparation);
+                Objects.equals(preparation, that.preparation) &&
+                Objects.equals(optional, that.optional);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, quantity, preparation);
+        return Objects.hash(name, quantity, preparation, optional);
     }
 
     @Override
@@ -97,6 +117,7 @@ public class Ingredient {
                 "name='" + name + '\'' +
                 ", quantity=" + quantity +
                 ", preparation=" + preparation +
+                ", optional=" + optional +
                 '}';
     }
 }

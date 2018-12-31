@@ -42,7 +42,7 @@ public class DefaultRecipe {
 
         var cheeseQuantity = new Quantity(30, Unit.GRAMS);
         var cheesePreparation = new Preparation(Method.GRATE, Style.FINE);
-        var cheese = new Ingredient("Cheddar Cheese", cheeseQuantity, cheesePreparation);
+        var cheese = new Ingredient("Cheddar Cheese", cheeseQuantity, cheesePreparation, true);
 
         var instructions = new Instructions();
         instructions.addNextStep(new Step("Heat olive oil in frying pan for a few minutes"));
