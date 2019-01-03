@@ -15,7 +15,7 @@ public class Quantity {
         WHOLE,
         CUP,
         PINT,
-        MILLILETRE, LITRE,
+        MILLILITRE, LITRE,
         TEASPOON, TABLESPOON,
         KILOGRAMS, GRAMS,
         SPRINKLE, PINCH, DASH,
