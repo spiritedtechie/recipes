@@ -34,7 +34,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     protected ResponseEntity<Object> handleAllOtherProblems(RuntimeException ex, WebRequest request) {
         return handleException(request,
                 new RuntimeException("We are sorry but there was a problem with the service. " +
-                        "We are aware of the problem and will fix it as soon as we can."),
+                        "We are aware of the problem and will fix it as soon as we can.", ex),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
