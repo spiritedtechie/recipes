@@ -195,9 +195,7 @@ class FormContainer extends Component {
         this.setState( {
             recipe: {
                 name: "",
-                ingredients: [
-
-                ]
+                ingredients: []
             }
         });
     }
@@ -229,14 +227,15 @@ class FormContainer extends Component {
                 />{" "}
 
                 <br/>
+
+                {ingredients}
+
                 <Button
                     action={this.handleAddIngredient}
                     type={"primary"}
                     title={"Add New Ingredient"}
                     style={buttonStyle}
                 />{" "}
-
-                {ingredients}
 
                 <Button
                     action={this.handleFormSubmit}
