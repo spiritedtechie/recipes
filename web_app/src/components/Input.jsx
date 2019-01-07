@@ -10,9 +10,9 @@ const Input = props => {
                 className="form-control"
                 id={props.name}
                 name={props.name}
-                type={props.inputType}
+                type={props.inputtype}
                 value={props.value}
-                onChange={props.handleChange}
+                onChange={props.onChange}
                 placeholder={props.placeholder}
                 {...props}
             />

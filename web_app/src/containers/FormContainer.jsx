@@ -4,24 +4,53 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import Select from "../components/Select";
 
+
+
 const Ingredient = (props) => {
+
+    const Preparation = () => {
+        if (props.ingredient.preparation) {
+            return (
+               <div>
+                    <Select
+                        title={'Method'}
+                        name={'unit'}
+                        options = {props.possiblePreparationMethods}
+                        value = {props.ingredient.preparation.method}
+                        placeholder = {'Select method'}
+                        onChange = {props.handlePreparationMethod}
+                    />{ }
+                    <Select
+                        title={'Style'}
+                        name={'style'}
+                        options = {props.possiblePreparationStyles}
+                        value = {props.ingredient.preparation.style}
+                        placeholder = {'Select style'}
+                        onChange = {props.handlePreparationStyle}
+                    />{ }
+                </div>
+            );
+        }
+        else return []
+    }
+
     return (
         <div>
-             <Input
-                inputType={"text"}
+            <Input
+                inputtype={"text"}
                 name={"Name"}
                 title={"Name"}
                 value={props.ingredient.name}
                 placeholder={"Enter ingredient name"}
-                handleChange={props.handleName}
+                onChange={props.handleName}
             />{" "}
             <Input
-                inputType={"number"}
+                inputtype={"number"}
                 name={"Quantity"}
                 title={"Quantity"}
                 value={props.ingredient.quantity.value}
                 placeholder={"Enter quantity"}
-                handleChange={props.handleQuantity}
+                onChange={props.handleQuantity}
             />{" "}
             <Select
                 title={'Unit'}
@@ -29,8 +58,15 @@ const Ingredient = (props) => {
                 options = {props.possibleUnits}
                 value = {props.ingredient.quantity.unit}
                 placeholder = {'Select unit'}
-                handleChange = {props.handleUnit}
+                onChange = {props.handleUnit}
             /> { }
+            <Button
+                action={props.handleEnablePreparation}
+                type={"secondary"}
+                title={"Preparation"}
+                style={buttonStyle}
+            />{" "}
+            <Preparation/>
         </div>
     );
 }
@@ -39,12 +75,12 @@ const InstructionStep = (props) => {
     return (
         <div>
             <Input
-                inputType={"text"}
+                inputtype={"text"}
                 name={"Add step details"}
                 title={props.stepNumber}
                 value={props.step}
                 placeholder={"Add step details"}
-                handleChange={props.handleInstructionStepChange}
+                onChange={props.handleInstructionStepChange}
             />{" "}
         </div>
     )
@@ -85,6 +121,34 @@ class FormContainer extends Component {
             response.json().then(data => {
                 this.setState({
                         ingredient_quantity_units: data
+                    }
+                );
+            });
+        });
+
+        fetch(this.recipeApiUrl + "/ingredient/preparation/methods", {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                    }
+        }).then(response => {
+            response.json().then(data => {
+                this.setState({
+                        ingredient_preparation_methods: data
+                    }
+                );
+            });
+        });
+
+        fetch(this.recipeApiUrl + "/ingredient/preparation/styles", {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                    }
+        }).then(response => {
+            response.json().then(data => {
+                this.setState({
+                        ingredient_preparation_styles: data
                     }
                 );
             });
@@ -175,6 +239,36 @@ class FormContainer extends Component {
         }))
     }
 
+    handlePreparationMethod(i, e) {
+        let value = e.target.value;
+        const ingredients = [ ...this.state.recipe.ingredients ];
+        let ingredient = {
+            ...ingredients[i]
+        }
+
+        ingredient['preparation'] = {
+            ...ingredient.preparation,
+            "method": value
+        };
+        ingredients[i] = ingredient;
+        this.updateIngredients(ingredients)
+    }
+
+    handlePreparationStyle(i, e) {
+        let value = e.target.value;
+        const ingredients = [ ...this.state.recipe.ingredients ];
+        let ingredient = {
+            ...ingredients[i]
+        }
+
+        ingredient['preparation'] = {
+            ...ingredient.preparation,
+            "style": value
+        };
+        ingredients[i] = ingredient;
+        this.updateIngredients(ingredients)
+    }
+
     updateIngredient = (index, getChangeForIngredient) => {
         const ingredients = [ ...this.state.recipe.ingredients ];
         let change = getChangeForIngredient(ingredients[index])
@@ -233,6 +327,24 @@ class FormContainer extends Component {
         }))
     }
 
+    handleEnablePreparation(i, e) {
+        e.preventDefault();
+
+        const ingredients = [ ...this.state.recipe.ingredients ];
+        let ingredient = {
+            ...ingredients[i]
+        }
+
+        if (!ingredient.preparation) {
+            ingredient['preparation'] = {
+                "style": "FINE",
+                "method": "GRATE"
+            };
+            ingredients[i] = ingredient;
+            this.updateIngredients(ingredients)
+        }
+    }
+
     handleClearForm(e) {
         e.preventDefault();
 
@@ -250,11 +362,17 @@ class FormContainer extends Component {
     renderIngredients = (ingredients) => {
         if (ingredients.length > 0) {
             return ingredients.map((ingredient, index) => (
-                <Ingredient ingredient={ingredient}
+                <Ingredient key={index}
+                            ingredient={ingredient}
                             possibleUnits={this.state.ingredient_quantity_units}
+                            possiblePreparationMethods={this.state.ingredient_preparation_methods}
+                            possiblePreparationStyles={this.state.ingredient_preparation_styles}
                             handleName={this.handleIngredientName.bind(this, index)}
                             handleQuantity={this.handleIngredientQuantity.bind(this, index)}
-                            handleUnit={this.handleIngredientQuantityUnit.bind(this, index)} />
+                            handleUnit={this.handleIngredientQuantityUnit.bind(this, index)}
+                            handleEnablePreparation={this.handleEnablePreparation.bind(this, index)}
+                            handlePreparationMethod={this.handlePreparationMethod.bind(this, index)}
+                            handlePreparationStyle={this.handlePreparationStyle.bind(this, index)} />
             ));
         }
         else return [];
@@ -263,9 +381,10 @@ class FormContainer extends Component {
     renderInstructions = (instructionSteps) => {
         if (instructionSteps.length > 0) {
             return instructionSteps.map((step, index) => (
-                <InstructionStep step={step}
-                             stepNumber={index+1}
-                             handleInstructionStepChange={this.handleInstructionStepChange.bind(this, index)} />
+                <InstructionStep key={index}
+                                 step={step}
+                                 stepNumber={index+1}
+                                 handleInstructionStepChange={this.handleInstructionStepChange.bind(this, index)} />
             ));
         }
         else return [];
@@ -278,12 +397,12 @@ class FormContainer extends Component {
         return (
             <form className="container-fluid" onSubmit={this.handleFormSubmit}>
                 <Input
-                    inputType={"text"}
+                    inputtype={"text"}
                     name={"Recipe name"}
                     title={"Recipe name"}
                     value={this.state.recipe.name}
                     placeholder={"Enter Recipe name"}
-                    handleChange={this.handleRecipeName.bind(this)}
+                    onChange={this.handleRecipeName.bind(this)}
                 />{" "}
 
                 <br/>
