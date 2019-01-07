@@ -4,6 +4,41 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import Select from "../components/Select";
 
+const Ingredient = (props) => {
+    return (
+        <div key={props.key}>
+             <Input
+                key={props.key}
+                inputType={"text"}
+                name={"Name"}
+                title={"Name"}
+                value={props.ingredient.name}
+                placeholder={"Enter ingredient name"}
+                handleChange={props.handleName}
+            />{" "}
+            <Input
+                key={props.key}
+                inputType={"number"}
+                name={"Quantity"}
+                title={"Quantity"}
+                value={props.ingredient.quantity.value}
+                placeholder={"Enter quantity"}
+                handleChange={props.handleQuantity}
+            />{" "}
+            <Select
+                key={props.key}
+                title={'Unit'}
+                name={'unit'}
+                options = {props.possibleUnits}
+                value = {props.ingredient.quantity.unit}
+                placeholder = {'Select unit'}
+                handleChange = {props.handleUnit}
+            /> { }
+        </div>
+    );
+}
+
+
 class FormContainer extends Component {
     constructor(props) {
         super(props);
@@ -12,12 +47,7 @@ class FormContainer extends Component {
             recipe: {
                 name: "",
                 ingredients: [
-                    {
-                        quantity: {
-                            value: 1,
-                            unit: "unknown"
-                        }
-                    }
+
                 ]
             },
             ingredient_quantity_units: []
@@ -27,11 +57,9 @@ class FormContainer extends Component {
 
         this.setStaticLookups()
 
-        this.handleRecipeName = this.handleRecipeName.bind(this);
-        this.handleQuantity = this.handleQuantity.bind(this);
-        this.handleUnit = this.handleUnit.bind(this);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.handleClearForm = this.handleClearForm.bind(this);
+        this.handleAddIngredient = this.handleAddIngredient.bind(this);
     }
 
     setStaticLookups() {
@@ -75,7 +103,7 @@ class FormContainer extends Component {
 
     handleRecipeName(e) {
         let value = e.target.value;
-        this.setState(
+        this.updateState(
             prevState => ({
                 recipe: {
                     ...prevState.recipe,
@@ -85,59 +113,81 @@ class FormContainer extends Component {
         );
     }
 
-    handleQuantity(e) {
+    handleIngredientName(i, e) {
         let value = e.target.value;
-
-        const ingredients = [ ...this.state.recipe.ingredients ];
-
-        let newIngredient = {
-            ...ingredients[0],
-            quantity: {
-                unit: ingredients[0].quantity.units,
+        this.updateIngredient(i, ingredient => {
+            return {
+                key: 'name',
                 value: value
             }
-        }
-
-        ingredients[0] = newIngredient;
-
-
-        this.setState(prevState => (
-                {
-                    recipe: {
-                        ...prevState.recipe,
-                        ingredients: ingredients
-                    }
-                })
-        );
+        })
     }
 
-    handleUnit(e) {
+    handleIngredientQuantity(i, e) {
         let value = e.target.value;
-
-        const ingredients = [ ...this.state.recipe.ingredients ];
-
-        let ingredient = {
-            ...ingredients[0],
-            quantity: {
-                unit: value,
-                value: ingredients[0].quantity.value
-
+        this.updateIngredient(i, ingredient => {
+            return {
+                key: 'quantity',
+                value: {
+                  ...ingredient.quantity,
+                  value: value
+               }
             }
+        })
+    }
+
+    handleIngredientQuantityUnit(i, e) {
+        let value = e.target.value;
+        this.updateIngredient(i, ingredient => {
+            return {
+                key: 'quantity',
+                value: {
+                  ...ingredient.quantity,
+                  unit: value
+               }
+            }
+        })
+    }
+
+    updateIngredient = (index, getChangeForIngredient) => {
+        const ingredients = [ ...this.state.recipe.ingredients ];
+        let change = getChangeForIngredient(ingredients[index])
+        let ingredient = {
+            ...ingredients[index]
         }
+        ingredient[change.key] = change.value;
+        ingredients[index] = ingredient;
+        this.updateIngredients(ingredients)
+    }
 
-        ingredients[0] = ingredient;
-
-
-        this.setState(prevState => (
+    updateIngredients = (ingredients) => {
+        this.updateState(prevState => (
             {
                 recipe: {
                     ...prevState.recipe,
                     ingredients: ingredients
                 }
-            }), d => {
-                console.log(this.state)
-            }
+            })
         );
+    }
+
+    updateState = getNewState => {
+        this.setState(prevState => getNewState(prevState),
+            () => console.log(this.state)
+        );
+    }
+
+    handleAddIngredient(e) {
+        const ingredients = [ ...this.state.recipe.ingredients ];
+
+        ingredients.push({
+            quantity: {
+                value: 1,
+                unit: "unknown"
+            }
+        })
+
+        this.updateIngredients(ingredients)
     }
 
     handleClearForm(e) {
@@ -146,18 +196,27 @@ class FormContainer extends Component {
             recipe: {
                 name: "",
                 ingredients: [
-                    {
-                        quantity: {
-                            value: 1,
-                            units: "unknown"
-                        }
-                    }
+
                 ]
             }
         });
     }
 
+    renderIngredients = (ingredients) => {
+        if (ingredients.length > 0) {
+            return ingredients.map((ingredient, index) => (
+                <Ingredient ingredient={ingredient}
+                            possibleUnits={this.state.ingredient_quantity_units}
+                            handleName={this.handleIngredientName.bind(this, index)}
+                            handleQuantity={this.handleIngredientQuantity.bind(this, index)}
+                            handleUnit={this.handleIngredientQuantityUnit.bind(this, index)} />
+            ));
+        }
+        else return [];
+    }
+
     render() {
+        const ingredients = this.renderIngredients(this.state.recipe.ingredients);
         return (
             <form className="container-fluid" onSubmit={this.handleFormSubmit}>
                 <Input
@@ -166,27 +225,18 @@ class FormContainer extends Component {
                     title={"Recipe name"}
                     value={this.state.recipe.name}
                     placeholder={"Enter Recipe name"}
-                    handleChange={this.handleRecipeName}
+                    handleChange={this.handleRecipeName.bind(this)}
                 />{" "}
-                Ingredients
-                { }
-                <br/>
 
-                <Input
-                    inputType={"number"}
-                    name={"Quantity"}
-                    title={"Quantity"}
-                    value={this.state.recipe.ingredients[0].quantity.value}
-                    placeholder={"Enter quantity"}
-                    handleChange={this.handleQuantity}
+                <br/>
+                <Button
+                    action={this.handleAddIngredient}
+                    type={"primary"}
+                    title={"Add New Ingredient"}
+                    style={buttonStyle}
                 />{" "}
-                <Select title={'Unit'}
-                        name={'unit'}
-                        options = {this.state.ingredient_quantity_units}
-                        value = {this.state.recipe.ingredients[0].quantity.unit}
-                        placeholder = {'Select unit'}
-                        handleChange = {this.handleUnit}
-                /> { }
+
+                {ingredients}
 
                 <Button
                     action={this.handleFormSubmit}

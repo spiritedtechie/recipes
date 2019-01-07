@@ -56,7 +56,7 @@ public class DefaultRecipe {
         this.ingredients.add(eggs);
         this.ingredients.add(cheese);
 
-        Recipe recipe = new Recipe(this.name, this.ingredients, instructions);
+        var recipe = new Recipe(this.name, this.ingredients, instructions);
         recipe.setId(this.id);
 
         return recipe;
