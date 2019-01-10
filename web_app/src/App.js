@@ -1,14 +1,28 @@
 import React, { Component } from 'react';
 import './App.css';
 import FormContainer from "./containers/FormContainer"
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
 
 class App extends Component {
 
   render() {
+
+    function reducer() {
+      return {
+          count: 42
+      };
+    }
+
+    const store = createStore(reducer);
+
     return (
-      <div className="App">
-        <FormContainer/>
-      </div>
+        <Provider store={store}>
+            <div className="App">
+                <FormContainer/>
+            </div>
+        </Provider>
     );
   }
 

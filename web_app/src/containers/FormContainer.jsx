@@ -1,10 +1,9 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
 
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Select from "../components/Select";
-
-
 
 const Ingredient = (props) => {
 
@@ -446,4 +445,8 @@ const buttonStyle = {
     margin: "10px 10px 10px 10px"
 };
 
-export default FormContainer;
+function mapStateToProps(state) {
+  return {};
+}
+
+export default connect(mapStateToProps)(FormContainer);
