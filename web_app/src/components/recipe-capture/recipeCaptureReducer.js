@@ -34,7 +34,7 @@ const reducer = (state = initialState, action) => {
             case "CHANGE_NAME":
                 draft.recipe.name = action.value
                 return
-            case "ADD_DEFAULT_INGREDIENT":
+            case "ADD_NEW_INGREDIENT":
                 draft.recipe.ingredients.push({
                     name: "",
                     quantity: {
@@ -66,10 +66,10 @@ const reducer = (state = initialState, action) => {
             case "SET_PREPARATION_STYLE":
                 draft.recipe.ingredients[action.index].preparation.style = action.value
                 return
-            case "ADD_DEFAULT_INSTRUCTION":
+            case "ADD_NEW_INSTRUCTION_STEP":
                 draft.recipe.instructions.steps.push("")
                 return
-            case "CHANGE_INSTRUCTION":
+            case "SET_INSTRUCTION":
                 draft.recipe.instructions.steps[action.index] = action.value
                 return
 

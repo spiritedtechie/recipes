@@ -55,12 +55,12 @@ class FormContainer extends Component {
 
     handleAddIngredient(e) {
         e.preventDefault();
-        this.props.dispatch({ type: "ADD_DEFAULT_INGREDIENT" })
+        this.props.dispatch({ type: "ADD_NEW_INGREDIENT" })
     }
 
     handleAddInstructionStep(e) {
         e.preventDefault();
-        this.props.dispatch({ type: "ADD_DEFAULT_INSTRUCTION" })
+        this.props.dispatch({ type: "ADD_NEW_INSTRUCTION_STEP" })
     }
 
     handleClearForm(e) {

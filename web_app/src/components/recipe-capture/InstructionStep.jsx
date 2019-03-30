@@ -5,7 +5,7 @@ import Input from "../common/Input";
 
 const InstructionStep = (props) => {
     const handleInstructionStepChange = (i, e) => {
-        props.dispatch({ type: "CHANGE_INSTRUCTION", index: i, value: e.target.value})
+        props.dispatch({ type: "SET_INSTRUCTION", index: i, value: e.target.value})
     }
 
     return (
