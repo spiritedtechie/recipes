@@ -1,18 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import FormContainer from "./components/recipe-capture/FormContainer"
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import reducer from './components/recipe-capture/recipeCaptureReducer'
 
-class App extends Component {
-
-  render() {
-
-    function reducer() {
-      return {
-          count: 42
-      };
-    }
+const App = () => {
 
     const store = createStore(reducer);
 
@@ -23,8 +16,6 @@ class App extends Component {
             </div>
         </Provider>
     );
-  }
-
 }
 
 export default App;
