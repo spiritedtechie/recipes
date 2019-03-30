@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import FormContainer from "./containers/FormContainer"
+import FormContainer from "./components/recipe-capture/FormContainer"
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-
 
 class App extends Component {
 

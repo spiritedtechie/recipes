@@ -1,90 +1,10 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 
-import Input from "../components/Input";
-import Button from "../components/Button";
-import Select from "../components/Select";
-
-const Ingredient = (props) => {
-
-    const Preparation = () => {
-        if (props.ingredient.preparation) {
-            return (
-               <div>
-                    <Select
-                        title={'Method'}
-                        name={'unit'}
-                        options = {props.possiblePreparationMethods}
-                        value = {props.ingredient.preparation.method}
-                        placeholder = {'Select method'}
-                        onChange = {props.handlePreparationMethod}
-                    />{ }
-                    <Select
-                        title={'Style'}
-                        name={'style'}
-                        options = {props.possiblePreparationStyles}
-                        value = {props.ingredient.preparation.style}
-                        placeholder = {'Select style'}
-                        onChange = {props.handlePreparationStyle}
-                    />{ }
-                </div>
-            );
-        }
-        else return []
-    }
-
-    return (
-        <div>
-            <Input
-                inputtype={"text"}
-                name={"Name"}
-                title={"Name"}
-                value={props.ingredient.name}
-                placeholder={"Enter ingredient name"}
-                onChange={props.handleName}
-            />{" "}
-            <Input
-                inputtype={"number"}
-                name={"Quantity"}
-                title={"Quantity"}
-                value={props.ingredient.quantity.value}
-                placeholder={"Enter quantity"}
-                onChange={props.handleQuantity}
-            />{" "}
-            <Select
-                title={'Unit'}
-                name={'unit'}
-                options = {props.possibleUnits}
-                value = {props.ingredient.quantity.unit}
-                placeholder = {'Select unit'}
-                onChange = {props.handleUnit}
-            /> { }
-            <Button
-                action={props.handleEnablePreparation}
-                type={"secondary"}
-                title={"Preparation"}
-                style={buttonStyle}
-            />{" "}
-            <Preparation/>
-        </div>
-    );
-}
-
-const InstructionStep = (props) => {
-    return (
-        <div>
-            <Input
-                inputtype={"text"}
-                name={"Add step details"}
-                title={props.stepNumber}
-                value={props.step}
-                placeholder={"Add step details"}
-                onChange={props.handleInstructionStepChange}
-            />{" "}
-        </div>
-    )
-}
-
+import Input from "../common/Input";
+import Button from "../common/Button";
+import Ingredient from "./Ingredient";
+import InstructionStep from "./InstructionStep";
 
 class FormContainer extends Component {
     constructor(props) {
@@ -98,7 +18,9 @@ class FormContainer extends Component {
                     steps: []
                 }
             },
-            ingredient_quantity_units: []
+            ingredient_quantity_units: [],
+            ingredient_preparation_methods: [],
+            ingredient_preparation_styles: []
         };
 
         this.recipeApiUrl = "http://localhost:8080"
