@@ -74,6 +74,7 @@ class FormContainer extends Component {
                 <Ingredient key={index}
                             id={index}
                             name={ingredient.name}
+                            optional={ingredient.optional}
                             quantity_unit={ingredient.quantity.units}
                             quantity_value={ingredient.quantity.value}
                             preparation={ingredient.preparation}/>

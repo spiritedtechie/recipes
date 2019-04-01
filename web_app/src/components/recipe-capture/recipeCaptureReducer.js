@@ -14,8 +14,6 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-    console.log('reducer', state, action);
-
     return produce(state, draft => {
         // eslint-disable-next-line
         switch(action.type) {
@@ -37,6 +35,7 @@ const reducer = (state = initialState, action) => {
             case "ADD_NEW_INGREDIENT":
                 draft.recipe.ingredients.push({
                     name: "",
+                    optional: false,
                     quantity: {
                       value: 1,
                       unit: "GRAMS"
@@ -51,6 +50,9 @@ const reducer = (state = initialState, action) => {
                 return
             case "SET_INGREDIENT_UNIT":
                 draft.recipe.ingredients[action.index].quantity.unit = action.value
+                return
+            case "SET_INGREDIENT_OPTIONAL":
+                draft.recipe.ingredients[action.index].optional = action.value
                 return
             case "SET_DEFAULT_PREPARATION":
                 if (!draft.recipe.ingredients[action.index].preparation) {

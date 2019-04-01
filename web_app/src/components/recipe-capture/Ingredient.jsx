@@ -25,6 +25,10 @@ const Ingredient = (props) => {
         props.dispatch({ type: "SET_DEFAULT_PREPARATION", index: i});
     }
 
+    const handleOptional = (i,e) => {
+        props.dispatch({ type: "SET_INGREDIENT_OPTIONAL", index: i, value: e.target.checked});
+    }
+
     const renderPreparation = (id, preparation) => {
         if (preparation) {
             return <Preparation id={id}
@@ -37,6 +41,14 @@ const Ingredient = (props) => {
 
     return (
         <div>
+            <div className="form-group">
+                <input
+                    type="checkbox"
+                    name="optional"
+                    onClick={handleOptional.bind(this, props.id)}
+                    defaultChecked={props.optional}
+                /> Optional
+            </div>
             <Input
                 inputtype={"text"}
                 name={"Name"}
