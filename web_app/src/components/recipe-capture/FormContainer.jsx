@@ -51,6 +51,15 @@ class FormContainer extends Component {
         this.props.dispatch({ type: "CHANGE_NAME", value: e.target.value });
     }
 
+    handleImageChange(e) {
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        reader.onloadend = () => {
+           this.props.dispatch({ type: "CHANGE_IMAGE", value: reader.result });
+        }
+        reader.readAsDataURL(file)
+    }
+
     handleAddIngredient(e) {
         e.preventDefault();
         this.props.dispatch({ type: "ADD_NEW_INGREDIENT" })
@@ -64,6 +73,14 @@ class FormContainer extends Component {
     handleClearForm(e) {
         e.preventDefault();
         this.props.dispatch({ type: "RESET_RECIPE" })
+    }
+
+    renderImagePreview = (image) => {
+        if (image) {
+          return (<img id="preview-image" src={image} />);
+        } else {
+          return (<div id="preview-text">Please select an Image for Preview</div>);
+        }
     }
 
     renderIngredients = (ingredients) => {
@@ -94,6 +111,7 @@ class FormContainer extends Component {
     }
 
     render() {
+        const imagePreview = this.renderImagePreview(this.props.recipe.image)
         const ingredients = this.renderIngredients(this.props.recipe.ingredients);
         const instructions = this.renderInstructions(this.props.recipe.instructions.steps);
 
@@ -115,6 +133,19 @@ class FormContainer extends Component {
                       placeholder={"Enter Recipe name"}
                       onChange={this.handleRecipeName.bind(this)}
                   />
+                </div>
+
+                <div id="image-upload">
+                    <div className="form-group">
+                        <label htmlFor="image-file-select">Save A Picture!</label>
+                        <input
+                            className="image-file-select form-control-file"
+                            type="file"
+                            onChange={(e)=>this.handleImageChange(e)} />
+                    </div>
+                    <div id="image-preview">
+                        {imagePreview}
+                    </div>
                 </div>
 
                 <div id="ingredients">

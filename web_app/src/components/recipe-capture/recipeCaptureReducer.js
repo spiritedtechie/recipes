@@ -33,6 +33,9 @@ const reducer = (state = initialState, action) => {
             case "CHANGE_NAME":
                 draft.recipe.name = action.value
                 return
+            case "CHANGE_IMAGE":
+                draft.recipe.image = action.value
+                return
             case "DELETE_INGREDIENT":
                 draft.recipe.ingredients.splice(action.index, 1)
                 return

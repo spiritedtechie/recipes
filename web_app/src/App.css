@@ -2,6 +2,14 @@
     padding: 10px;
 }
 
+#image-preview #preview-image {
+    height: 150px;
+}
+
+#ingredients {
+    margin-top: 20px;
+}
+
 #ingredients > .ingredient:nth-of-type(odd) {
     background: #e0e0e0;
 }
