@@ -1,12 +1,15 @@
 import React from "react";
 import { connect } from 'react-redux';
 
-import Preparation from './Preparation'
-import Input from '../common/Input'
-import Select from '../common/Select'
-import Button from '../common/Button'
-
 const Ingredient = (props) => {
+
+    const handlePreparationMethod = (i, e) => {
+        props.dispatch({ type: "SET_PREPARATION_METHOD", index: i, value: e.target.value });
+    }
+
+    const handlePreparationStyle = (i, e) => {
+        props.dispatch({ type: "SET_PREPARATION_STYLE", index: i, value: e.target.value });
+    }
 
     const handleName = (i, e) => {
         props.dispatch({ type: "SET_INGREDIENT_NAME", index: i, value: e.target.value });
@@ -20,65 +23,128 @@ const Ingredient = (props) => {
         props.dispatch({ type: "SET_INGREDIENT_UNIT", index: i, value: e.target.value });
     }
 
-    const handleEnablePreparation = (i,e) => {
-        e.preventDefault();
-        props.dispatch({ type: "SET_DEFAULT_PREPARATION", index: i});
-    }
-
     const handleOptional = (i,e) => {
         props.dispatch({ type: "SET_INGREDIENT_OPTIONAL", index: i, value: e.target.checked});
     }
 
-    const renderPreparation = (id, preparation) => {
-        if (preparation) {
-            return <Preparation id={id}
-                                method={preparation.method}
-                                style={preparation.style} />
-        } else return []
+    const renderPreparation = (index, preparation) => {
+        return (
+        <>
+            <div className="prep-method-group form-group ">
+                <label
+                    className="form-label"
+                    htmlFor="prep-method-select">
+                    Method
+                </label>
+                <select
+                    className="prep-method-select form-control"
+                    value={preparation ? preparation.method : ""}
+                    onChange={handlePreparationMethod.bind(this, index)}>
+                        <option value="" disabled>Select method</option>
+                        {props.possiblePreparationMethods.map(option => {
+                            return (
+                                <option
+                                    key={option}
+                                    value={option}
+                                    label={option}>{option}</option>
+                            );
+                        })}
+                    }
+                </select>
+            </div>
+            <div className="prep-style-group form-group">
+                <label
+                    className="form-label"
+                    htmlFor="prep-style-select">
+                    Style
+                </label>
+                <select
+                    className="prep-style-select form-control"
+                    value={preparation ? preparation.style : ""}
+                    onChange={handlePreparationStyle.bind(this, index)}>
+                        <option value="" disabled>Select style</option>
+                        {props.possiblePreparationStyles.map(option => {
+                            return (
+                                <option
+                                    key={option}
+                                    value={option}
+                                    label={option}>{option}</option>
+                            );
+                        })}
+                    }
+                </select>
+            </div>
+            </>
+        );
     }
 
-    const preparation = renderPreparation(props.id, props.preparation)
+    const preparation = renderPreparation(props.index, props.preparation)
 
     return (
-        <div>
-            <div className="form-group">
+        <div id={"ingredient-" + props.index} className="ingredient">
+            <div className="optional-group form-group">
+                <label
+                    className="form-label"
+                    htmlFor="optional-checkbox">
+                    Optional
+                </label>
                 <input
+                    className="optional-checkbox form-check-input"
                     type="checkbox"
-                    name="optional"
-                    onClick={handleOptional.bind(this, props.id)}
                     defaultChecked={props.optional}
-                /> Optional
+                    onClick={handleOptional.bind(this, props.index)}
+                />
             </div>
-            <Input
-                inputtype={"text"}
-                name={"Name"}
-                title={"Name"}
-                value={props.name}
-                placeholder={"Enter ingredient name"}
-                onChange={handleName.bind(this, props.id)}
-            />{" "}
-            <Input
-                inputtype={"number"}
-                name={"Quantity"}
-                title={"Quantity"}
-                value={props.quantity_value}
-                placeholder={"Enter quantity"}
-                onChange={handleQuantity.bind(this, props.id)}
-            />{" "}
-            <Select
-                title={'Unit'}
-                name={'unit'}
-                options = {props.possibleUnits}
-                value = {props.quantity_unit}
-                placeholder = {'Select unit'}
-                onChange = {handleUnit.bind(this, props.id)}
-            /> { }
-            <Button
-                action={handleEnablePreparation.bind(this, props.id)}
-                type={"secondary"}
-                title={"Preparation"}
-                style={buttonStyle}
-            />{" "}
+            <div className="name-group form-group">
+                <label
+                    className="form-label"
+                    htmlFor="name-input">
+                    Ingredient Name
+                </label>
+                <input
+                    className="name-input form-control"
+                    type="text"
+                    value={props.name}
+                    placeholder="Enter ingredient name"
+                    onChange={handleName.bind(this, props.index)}
+                />
+            </div>
+            <div className="quantity-group form-group">
+                <label
+                    className="form-label"
+                    htmlFor="quantity-input">
+                    Quantity
+                </label>
+                <input
+                    className="quantity-input form-control"
+                    type="number"
+                    value={props.quantity_value}
+                    placeholder="Enter quantity"
+                    onChange={handleQuantity.bind(this, props.index)}
+                />
+            </div>
+            <div className="unit-group form-group">
+                <label
+                    className="form-label"
+                    htmlFor="unit-select">
+                    Unit
+                </label>
+                <select
+                    className="unit-select form-control"
+                    value={props.quantity_unit}
+                    onChange={handleUnit.bind(this, props.index)}>
+                        <option value="" disabled>Select Unit</option>
+                        {props.possibleUnits.map(option => {
+                            return (
+                                <option
+                                    key={option}
+                                    value={option}
+                                    label={option}>{option}</option>
+                            );
+                        })}
+                    }
+                </select>
+            </div>
 
             {preparation}
 
@@ -86,13 +152,11 @@ const Ingredient = (props) => {
     );
 }
 
-const buttonStyle = {
-    margin: "10px 10px 10px 10px"
-};
-
 function mapStateToProps(state, props) {
     return {
-        possibleUnits: state.ingredient_quantity_units
+        possibleUnits: state.ingredient_quantity_units,
+        possiblePreparationMethods: state.ingredient_preparation_methods,
+        possiblePreparationStyles: state.ingredient_preparation_styles
     }
 }
 

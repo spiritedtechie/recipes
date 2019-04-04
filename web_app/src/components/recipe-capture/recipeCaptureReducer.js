@@ -14,6 +14,7 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
+    console.log(action)
     return produce(state, draft => {
         // eslint-disable-next-line
         switch(action.type) {
@@ -63,9 +64,15 @@ const reducer = (state = initialState, action) => {
                 }
                 return
             case "SET_PREPARATION_METHOD":
+                if (!draft.recipe.ingredients[action.index].preparation) {
+                    draft.recipe.ingredients[action.index].preparation =  {}
+                }
                 draft.recipe.ingredients[action.index].preparation.method = action.value
                 return
             case "SET_PREPARATION_STYLE":
+                if (!draft.recipe.ingredients[action.index].preparation) {
+                    draft.recipe.ingredients[action.index].preparation =  {}
+                }
                 draft.recipe.ingredients[action.index].preparation.style = action.value
                 return
             case "ADD_NEW_INSTRUCTION_STEP":

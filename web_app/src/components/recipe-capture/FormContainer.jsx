@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 
-import Input from "../common/Input";
-import Button from "../common/Button";
 import Ingredient from "./Ingredient";
 import InstructionStep from "./InstructionStep";
 
@@ -72,10 +70,10 @@ class FormContainer extends Component {
         if (ingredients.length > 0) {
             return ingredients.map((ingredient, index) => (
                 <Ingredient key={index}
-                            id={index}
+                            index={index}
                             name={ingredient.name}
                             optional={ingredient.optional}
-                            quantity_unit={ingredient.quantity.units}
+                            quantity_unit={ingredient.quantity.unit}
                             quantity_value={ingredient.quantity.value}
                             preparation={ingredient.preparation}/>
             ));
@@ -86,7 +84,10 @@ class FormContainer extends Component {
     renderInstructions = (instructionSteps) => {
         if (instructionSteps.length > 0) {
             return instructionSteps.map((stepText, index) => (
-                <InstructionStep key={index} id={index} stepText={stepText} />
+                <InstructionStep
+                    key={index}
+                    index={index}
+                    stepText={stepText} />
             ));
         }
         else return [];
@@ -97,48 +98,53 @@ class FormContainer extends Component {
         const instructions = this.renderInstructions(this.props.recipe.instructions.steps);
 
         return (
-            <form className="container-fluid" onSubmit={this.handleFormSubmit}>
-                <Input
-                    inputtype={"text"}
-                    name={"Recipe name"}
-                    title={"Recipe name"}
-                    value={this.props.recipe.name}
-                    placeholder={"Enter Recipe name"}
-                    onChange={this.handleRecipeName.bind(this)}
-                />{" "}
+            <form id="recipe-form"
+                  onSubmit={this.handleFormSubmit}>
 
-                <br/>
+                <div className="name-group form-group">
+                  <label
+                      className="form-label"
+                      htmlFor="recipe-name">
+                      Recipe Name
+                  </label>
+                  <input
+                      id="recipe-name"
+                      className="form-control"
+                      type="text"
+                      value={this.props.recipe.name}
+                      placeholder={"Enter Recipe name"}
+                      onChange={this.handleRecipeName.bind(this)}
+                  />
+                </div>
 
-                {ingredients}
-                <br/>
+                <div id="ingredients">
+                    {ingredients}
+                    <button
+                        id="add-new-ingredient"
+                        className="btn btn-primary"
+                        label={"Add New Ingredient"}
+                        onClick={this.handleAddIngredient}>Add New Ingredient</button>
+                </div>
 
-                {instructions}
-                <br/>
+                <div id="instructions">
+                    {instructions}
+                    <button
+                        id="add-next-instruction"
+                        className="btn btn-primary"
+                        label={"Add Next Step"}
+                        onClick={this.handleAddInstructionStep}>Add Next Step</button>
+                </div>
 
-                <Button
-                    action={this.handleAddInstructionStep}
-                    type={"primary"}
-                    title={"Add Next Step"}
-                    style={buttonStyle}
-                />{" "}
-                <Button
-                    action={this.handleAddIngredient}
-                    type={"primary"}
-                    title={"Add New Ingredient"}
-                    style={buttonStyle}
-                />{" "}
-                <Button
-                    action={this.handleFormSubmit}
-                    type={"primary"}
-                    title={"Submit"}
-                    style={buttonStyle}
-                />{" "}
-                <Button
-                    action={this.handleClearForm}
-                    type={"secondary"}
-                    title={"Clear"}
-                    style={buttonStyle}
-                />{" "}
+                <div id="finalise">
+                    <button
+                        id="submit"
+                        className="btn btn-primary"
+                        onClick={this.handleFormSubmit}>Submit</button>
+                    <button
+                        id="clear"
+                        className="btn btn-secondary"
+                        onClick={this.handleClearForm}>Clear</button>
+                </div>
             </form>
         );
     }
@@ -156,10 +162,6 @@ const getData = (url, callback) => {
         });
     });
 }
-
-const buttonStyle = {
-    margin: "10px 10px 10px 10px"
-};
 
 function mapStateToProps(state) {
     return {

@@ -1,0 +1,64 @@
+#recipe-form {
+    padding: 10px;
+}
+
+#ingredients > .ingredient:nth-of-type(odd) {
+    background: #e0e0e0;
+}
+
+.ingredient {
+    display: flex;
+    width: 100%;
+}
+
+.ingredient .form-group {
+    margin-left: 10px;
+}
+
+.ingredient .optional-group {
+    display: block;
+}
+
+.ingredient .optional-checkbox {
+    display: block;
+}
+
+.ingredient .name-group {
+    width: 300px;
+}
+
+.ingredient .quantity-group {
+    width: 100px;
+}
+
+.ingredient .unit-group {
+    width: 150px;
+}
+
+.ingredient .prep-method-group {
+    width: 150px;
+}
+
+.ingredient .prep-style-group {
+    width: 150px;
+}
+
+#instructions {
+    margin-top: 20px;
+}
+
+.instruction {
+    display: flex;
+}
+
+.instruction .instruction-text {
+    margin-left: 10px;
+}
+
+.instruction label {
+    margin-top: 5px;
+}
+
+#finalise {
+    margin-top: 20px;
+}

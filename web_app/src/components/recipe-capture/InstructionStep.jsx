@@ -1,23 +1,25 @@
 import React from "react";
 import { connect } from 'react-redux';
 
-import Input from "../common/Input";
-
 const InstructionStep = (props) => {
     const handleInstructionStepChange = (i, e) => {
         props.dispatch({ type: "SET_INSTRUCTION", index: i, value: e.target.value})
     }
 
     return (
-        <div>
-            <Input
-                inputtype={"text"}
-                name={"Add step details"}
-                title={props.id}
+        <div id={"instruction-" + props.index} className="instruction form-group">
+            <label
+                className="form-label"
+                htmlFor="instruction-text">
+                {props.index + 1}
+            </label>
+            <input
+                className="instruction-text form-control"
+                type="text"
+                placeholder="Add step details"
                 value={props.stepText}
-                placeholder={"Add step details"}
-                onChange={handleInstructionStepChange.bind(this, props.id)}
-            />{" "}
+                onChange={handleInstructionStepChange.bind(this, props.index)}
+            />
         </div>
     )
 }
