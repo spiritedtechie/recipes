@@ -6,6 +6,10 @@ const InstructionStep = (props) => {
         props.dispatch({ type: "SET_INSTRUCTION", index: i, value: e.target.value})
     }
 
+    const handleDelete = (i,e) => {
+        props.dispatch({ type: "DELETE_INSTRUCTION", index: i});
+    }
+
     return (
         <div id={"instruction-" + props.index} className="instruction form-group">
             <label
@@ -20,6 +24,7 @@ const InstructionStep = (props) => {
                 value={props.stepText}
                 onChange={handleInstructionStepChange.bind(this, props.index)}
             />
+            <div className="delete" onClick={handleDelete.bind(this, props.index)}>&nbsp;</div>
         </div>
     )
 }

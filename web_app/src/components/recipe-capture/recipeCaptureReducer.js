@@ -33,6 +33,9 @@ const reducer = (state = initialState, action) => {
             case "CHANGE_NAME":
                 draft.recipe.name = action.value
                 return
+            case "DELETE_INGREDIENT":
+                draft.recipe.ingredients.splice(action.index, 1)
+                return
             case "ADD_NEW_INGREDIENT":
                 draft.recipe.ingredients.push({
                     name: "",
@@ -74,6 +77,9 @@ const reducer = (state = initialState, action) => {
                     draft.recipe.ingredients[action.index].preparation =  {}
                 }
                 draft.recipe.ingredients[action.index].preparation.style = action.value
+                return
+            case "DELETE_INSTRUCTION":
+                draft.recipe.instructions.steps.splice(action.index, 1)
                 return
             case "ADD_NEW_INSTRUCTION_STEP":
                 draft.recipe.instructions.steps.push("")

@@ -27,6 +27,10 @@ const Ingredient = (props) => {
         props.dispatch({ type: "SET_INGREDIENT_OPTIONAL", index: i, value: e.target.checked});
     }
 
+    const handleDelete = (i,e) => {
+        props.dispatch({ type: "DELETE_INGREDIENT", index: i});
+    }
+
     const renderPreparation = (index, preparation) => {
         return (
         <>
@@ -74,6 +78,7 @@ const Ingredient = (props) => {
                     }
                 </select>
             </div>
+            <div className="delete" onClick={handleDelete.bind(this, index)}>&nbsp;</div>
             </>
         );
     }
