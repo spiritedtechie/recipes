@@ -28,9 +28,6 @@ const reducer = (state = initialState, action) => {
             case "SET_QUANTITY_UNITS_LOOKUP":
                 draft.ingredient_quantity_units = action.data
                 return
-            case "RESET_RECIPE":
-                draft.recipe = initialState.recipe
-                return
             case "CHANGE_NAME":
                 draft.recipe.name = action.value
                 return
@@ -97,6 +94,9 @@ const reducer = (state = initialState, action) => {
             case "RECIPE_SAVED":
                 draft.recipe.id = action.id
                 draft.saving_flag = false
+                return
+            case "RECIPE_DELETED":
+                draft.recipe = initialState.recipe
                 return
         }
     })

@@ -20,7 +20,7 @@ class FormContainer extends Component {
         })
 
         this.handleSave = this.handleSave.bind(this);
-        this.handleClearForm = this.handleClearForm.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
         this.handleAddIngredient = this.handleAddIngredient.bind(this);
         this.handleAddInstructionStep = this.handleAddInstructionStep.bind(this);
     }
@@ -38,17 +38,31 @@ class FormContainer extends Component {
                  recipeApiUrl + "/recipes/" + recipe.id,
                  recipeJson,
                  (data) => {
-                    this.props.dispatch({ type: "RECIPE_SAVED", id: data.id
-                 });
-            })
+                    this.props.dispatch({ type: "RECIPE_SAVED", id: data.id });
+                 }
+            )
         } else {
             save("POST",
                  recipeApiUrl + "/recipes",
                  recipeJson,
                  (data) => {
-                    this.props.dispatch({ type: "RECIPE_SAVED", id: data.id
-                 });
-            })
+                    this.props.dispatch({ type: "RECIPE_SAVED", id: data.id });
+                 }
+            )
+        }
+    }
+
+    handleDelete(e) {
+        e.preventDefault();
+
+        if (this.props.recipe.id) {
+            del(recipeApiUrl + "/recipes/" + this.props.recipe.id,
+                   data => {
+                      this.props.dispatch({ type: "RECIPE_DELETED" });
+                   }
+            )
+        } else {
+            this.props.dispatch({ type: "RECIPE_DELETED" });
         }
     }
 
@@ -73,11 +87,6 @@ class FormContainer extends Component {
     handleAddInstructionStep(e) {
         e.preventDefault();
         this.props.dispatch({ type: "ADD_NEW_INSTRUCTION_STEP" })
-    }
-
-    handleClearForm(e) {
-        e.preventDefault();
-        this.props.dispatch({ type: "RESET_RECIPE" })
     }
 
     renderImagePreview = (image) => {
@@ -178,9 +187,9 @@ class FormContainer extends Component {
                         disabled={this.props.saving}
                         onClick={this.handleSave}>Save</button>
                     <button
-                        id="clear"
+                        id="delete"
                         className="btn btn-secondary"
-                        onClick={this.handleClearForm}>Clear</button>
+                        onClick={this.handleDelete}>{this.props.recipe.id ? "Delete" : "Clear"}</button>
                 </div>
             </form>
         );
@@ -213,6 +222,17 @@ const save = (method, url, body, callback) => {
             callback(data)
         });
     });
+}
+
+const del = (url, callback) => {
+   fetch(url, {
+       method: "DELETE",
+       headers: {
+           Accept: "application/json",
+       }
+   }).then(response => {
+       callback()
+   });
 }
 
 function mapStateToProps(state) {
