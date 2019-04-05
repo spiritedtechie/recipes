@@ -9,42 +9,47 @@ const recipeApiUrl = "http://localhost:8080"
 class FormContainer extends Component {
     constructor(props) {
         super(props);
-        getData(recipeApiUrl + "/ingredient/preparation/methods", (data) => {
+        get(recipeApiUrl + "/ingredient/preparation/methods", (data) => {
             props.dispatch({ type: "SET_PREPARATION_METHODS_LOOKUPS", data: data });
         })
-        getData(recipeApiUrl + "/ingredient/preparation/styles", (data) => {
+        get(recipeApiUrl + "/ingredient/preparation/styles", (data) => {
             props.dispatch({ type: "SET_PREPARATION_STYLES_LOOKUPS", data: data });
         })
-        getData(recipeApiUrl + "/ingredient/quantity/units", (data) => {
+        get(recipeApiUrl + "/ingredient/quantity/units", (data) => {
             props.dispatch({ type: "SET_QUANTITY_UNITS_LOOKUP", data: data });
         })
 
-        this.handleFormSubmit = this.handleFormSubmit.bind(this);
+        this.handleSave = this.handleSave.bind(this);
         this.handleClearForm = this.handleClearForm.bind(this);
         this.handleAddIngredient = this.handleAddIngredient.bind(this);
         this.handleAddInstructionStep = this.handleAddInstructionStep.bind(this);
     }
 
-    handleFormSubmit(e) {
+    handleSave(e) {
         e.preventDefault();
 
-        let recipeData = this.props.recipe;
-        console.log(JSON.stringify(recipeData))
+        this.props.dispatch({ type: "SAVING_RECIPE"})
 
-//        fetch(this.recipeApiUrl + "/recipes", {
-//            method: "POST",
-//            body: JSON.stringify(recipeData),
-//            headers: {
-//                Accept: "application/json",
-//                "Content-Type": "application/json"
-//            }
-//        }).then(response => {
-//            console.log(response)
-//
-//            response.text().then(data => {
-//                console.log("Response body: " + data);
-//            });
-//        });
+        const recipe = this.props.recipe;
+        const recipeJson = JSON.stringify(recipe)
+
+        if (recipe.id) {
+            save("PUT",
+                 recipeApiUrl + "/recipes/" + recipe.id,
+                 recipeJson,
+                 (data) => {
+                    this.props.dispatch({ type: "RECIPE_SAVED", id: data.id
+                 });
+            })
+        } else {
+            save("POST",
+                 recipeApiUrl + "/recipes",
+                 recipeJson,
+                 (data) => {
+                    this.props.dispatch({ type: "RECIPE_SAVED", id: data.id
+                 });
+            })
+        }
     }
 
     handleRecipeName(e) {
@@ -52,8 +57,8 @@ class FormContainer extends Component {
     }
 
     handleImageChange(e) {
-        let reader = new FileReader();
-        let file = e.target.files[0];
+        const reader = new FileReader();
+        const file = e.target.files[0];
         reader.onloadend = () => {
            this.props.dispatch({ type: "CHANGE_IMAGE", value: reader.result });
         }
@@ -77,7 +82,7 @@ class FormContainer extends Component {
 
     renderImagePreview = (image) => {
         if (image) {
-          return (<img id="preview-image" src={image} />);
+          return (<img id="preview-image" alt="recipe" src={image} />);
         } else {
           return (<div id="preview-text">Please select an Image for Preview</div>);
         }
@@ -111,7 +116,7 @@ class FormContainer extends Component {
     }
 
     render() {
-        const imagePreview = this.renderImagePreview(this.props.recipe.image)
+        const imagePreview = this.renderImagePreview(this.props.image)
         const ingredients = this.renderIngredients(this.props.recipe.ingredients);
         const instructions = this.renderInstructions(this.props.recipe.instructions.steps);
 
@@ -168,9 +173,10 @@ class FormContainer extends Component {
 
                 <div id="finalise">
                     <button
-                        id="submit"
+                        id="save"
                         className="btn btn-primary"
-                        onClick={this.handleFormSubmit}>Submit</button>
+                        disabled={this.props.saving}
+                        onClick={this.handleSave}>Save</button>
                     <button
                         id="clear"
                         className="btn btn-secondary"
@@ -181,7 +187,7 @@ class FormContainer extends Component {
     }
 }
 
-const getData = (url, callback) => {
+const get = (url, callback) => {
     fetch(url, {
         method: "GET",
         headers: {
@@ -194,9 +200,26 @@ const getData = (url, callback) => {
     });
 }
 
+const save = (method, url, body, callback) => {
+    fetch(url, {
+        method: method,
+        body: body,
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    }).then(response => {
+        response.json().then(data => {
+            callback(data)
+        });
+    });
+}
+
 function mapStateToProps(state) {
     return {
-        recipe: state.recipe
+        recipe: state.recipe,
+        image: state.image,
+        saving: state.saving_flag
     };
 }
 

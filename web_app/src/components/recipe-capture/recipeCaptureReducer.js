@@ -10,7 +10,8 @@ const initialState = {
     },
     ingredient_quantity_units: [],
     ingredient_preparation_methods: [],
-    ingredient_preparation_styles: []
+    ingredient_preparation_styles: [],
+    saving_flag: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -34,7 +35,7 @@ const reducer = (state = initialState, action) => {
                 draft.recipe.name = action.value
                 return
             case "CHANGE_IMAGE":
-                draft.recipe.image = action.value
+                draft.image = action.value
                 return
             case "DELETE_INGREDIENT":
                 draft.recipe.ingredients.splice(action.index, 1)
@@ -90,7 +91,13 @@ const reducer = (state = initialState, action) => {
             case "SET_INSTRUCTION":
                 draft.recipe.instructions.steps[action.index] = action.value
                 return
-
+            case "SAVING_RECIPE":
+                draft.saving_flag = true
+                return
+            case "RECIPE_SAVED":
+                draft.recipe.id = action.id
+                draft.saving_flag = false
+                return
         }
     })
 }
