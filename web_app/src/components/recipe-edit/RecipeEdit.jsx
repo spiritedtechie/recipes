@@ -6,7 +6,7 @@ import InstructionStep from "./InstructionStep";
 
 const recipeApiUrl = "http://localhost:8080"
 
-class FormContainer extends Component {
+class RecipeEdit extends Component {
     constructor(props) {
         super(props);
         get(recipeApiUrl + "/ingredient/preparation/methods", (data) => {
@@ -243,4 +243,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(FormContainer);
+export default connect(mapStateToProps)(RecipeEdit);

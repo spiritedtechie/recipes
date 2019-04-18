@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Route, NavLink, HashRouter } from "react-router-dom";
-import FormContainer from "../recipe-capture/RecipeCapture";
+import RecipeEdit from "../recipe-edit/RecipeEdit";
 import RecipeList from "../recipe-list/RecipeList"
 
 class Main extends Component {
@@ -19,7 +19,7 @@ class Main extends Component {
                     </ul>
                     <div className="content">
                         <Route exact path="/" component={RecipeList}/>
-                        <Route exact path="/recipe/new" component={FormContainer}/>
+                        <Route exact path="/recipe/new" component={RecipeEdit}/>
                     </div>
                 </div>
             </HashRouter>
