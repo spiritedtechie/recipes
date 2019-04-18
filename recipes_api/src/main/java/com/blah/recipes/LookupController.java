@@ -2,13 +2,12 @@ package com.blah.recipes;
 
 import com.blah.recipes.model.Preparation;
 import com.blah.recipes.model.Quantity;
-import com.blah.recipes.model.Recipe;
-import io.micrometer.core.annotation.Timed;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.micrometer.core.annotation.Timed;
 
 @RestController
 @Timed(value = "recipes.lookups", percentiles = {0.5, 0.95, 0.999}, histogram = true)
