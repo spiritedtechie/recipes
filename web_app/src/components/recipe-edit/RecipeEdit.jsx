@@ -38,7 +38,7 @@ class RecipeEdit extends Component {
                  recipeApiUrl + "/recipes/" + recipe.id,
                  recipeJson,
                  (data) => {
-                    this.props.dispatch({ type: "RECIPE_SAVED", id: data.id });
+                    this.props.dispatch({ type: "RECIPE_SAVED", data: data });
                  }
             )
         } else {
@@ -46,7 +46,7 @@ class RecipeEdit extends Component {
                  recipeApiUrl + "/recipes",
                  recipeJson,
                  (data) => {
-                    this.props.dispatch({ type: "RECIPE_SAVED", id: data.id });
+                    this.props.dispatch({ type: "RECIPE_SAVED", data: data });
                  }
             )
         }
@@ -125,7 +125,8 @@ class RecipeEdit extends Component {
     }
 
     render() {
-        const imagePreview = this.renderImagePreview(this.props.image)
+        const image = this.props.recipe.rawImageBase64 ? this.props.recipe.rawImageBase64 : this.props.recipe.imageUrl
+        const imagePreview = this.renderImagePreview(image)
         const ingredients = this.renderIngredients(this.props.recipe.ingredients);
         const instructions = this.renderInstructions(this.props.recipe.instructions.steps);
 
@@ -238,7 +239,6 @@ const del = (url, callback) => {
 function mapStateToProps(state) {
     return {
         recipe: state.recipe,
-        image: state.image,
         saving: state.saving_flag
     };
 }

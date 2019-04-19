@@ -32,7 +32,7 @@ const reducer = (state = initialState, action) => {
                 draft.recipe.name = action.value
                 return
             case "CHANGE_IMAGE":
-                draft.image = action.value
+                draft.recipe.rawImageBase64 = action.value
                 return
             case "DELETE_INGREDIENT":
                 draft.recipe.ingredients.splice(action.index, 1)
@@ -92,7 +92,7 @@ const reducer = (state = initialState, action) => {
                 draft.saving_flag = true
                 return
             case "RECIPE_SAVED":
-                draft.recipe.id = action.id
+                draft.recipe = action.data
                 draft.saving_flag = false
                 return
             case "RECIPE_DELETED":
