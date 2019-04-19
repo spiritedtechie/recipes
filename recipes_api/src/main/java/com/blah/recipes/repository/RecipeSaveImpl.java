@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.ByteArrayInputStream;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -41,6 +42,7 @@ public class RecipeSaveImpl implements RecipeSave {
             var image = new Base64Image(recipe.getRawImageBase64().get());
             var imageUrl = storeImageInS3(image);
             recipe.setImageUrl(imageUrl);
+            recipe.setRawImageBase64(Optional.empty());
         }
 
         return dynamoDBTemplate.save(recipe);
