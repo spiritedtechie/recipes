@@ -114,11 +114,11 @@ class RecipeEdit extends Component {
 
     renderInstructions = (instructionSteps) => {
         if (instructionSteps.length > 0) {
-            return instructionSteps.map((stepText, index) => (
+            return instructionSteps.map((step, index) => (
                 <InstructionStep
                     key={index}
                     index={index}
-                    stepText={stepText} />
+                    stepDescription={step.description} />
             ));
         }
         else return [];

@@ -83,10 +83,14 @@ const reducer = (state = initialState, action) => {
                 draft.recipe.instructions.steps.splice(action.index, 1)
                 return
             case "ADD_NEW_INSTRUCTION_STEP":
-                draft.recipe.instructions.steps.push("")
+                draft.recipe.instructions.steps.push({
+                    description: ""
+                })
                 return
             case "SET_INSTRUCTION":
-                draft.recipe.instructions.steps[action.index] = action.value
+                draft.recipe.instructions.steps[action.index] = {
+                    description: action.value
+                }
                 return
             case "SAVING_RECIPE":
                 draft.saving_flag = true

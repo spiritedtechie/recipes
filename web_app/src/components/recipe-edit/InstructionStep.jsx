@@ -21,7 +21,7 @@ const InstructionStep = (props) => {
                 className="instruction-text form-control"
                 type="text"
                 placeholder="Add step details"
-                value={props.stepText}
+                value={props.stepDescription}
                 onChange={handleInstructionStepChange.bind(this, props.index)}
             />
             <div className="delete" onClick={handleDelete.bind(this, props.index)}>&nbsp;</div>
