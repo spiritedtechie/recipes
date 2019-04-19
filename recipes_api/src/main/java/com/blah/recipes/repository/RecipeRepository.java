@@ -6,7 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface RecipeRepository extends CrudRepository<Recipe, String> {
+public interface RecipeRepository
+        extends CrudRepository<Recipe, String>, RecipeSave {
 
     List<Recipe> findByName(String name);
 

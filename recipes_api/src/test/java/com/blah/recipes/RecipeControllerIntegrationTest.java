@@ -87,7 +87,7 @@ public class RecipeControllerIntegrationTest {
     public void testNewRecipe() throws Exception {
         var recipe = DefaultRecipe.getInstance().build();
         var recipeJson = om.writeValueAsString(recipe);
-        when(recipeRepository.save(recipe)).thenReturn(recipe);
+        when(recipeRepository.saveRecipe(recipe)).thenReturn(recipe);
         System.out.println("New recipe JSON: " + recipeJson);
 
         var resultActions = mvc.perform(
@@ -96,7 +96,7 @@ public class RecipeControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
-        verify(recipeRepository).save(recipe);
+        verify(recipeRepository).saveRecipe(recipe);
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().json(recipeJson, true));
@@ -106,11 +106,11 @@ public class RecipeControllerIntegrationTest {
     public void testNewDefaultRecipe() throws Exception {
         var defaultRecipe = DefaultRecipe.getInstance().build();
         var defaultRecipeJson = om.writeValueAsString(defaultRecipe);
-        when(recipeRepository.save(defaultRecipe)).thenReturn(defaultRecipe);
+        when(recipeRepository.saveRecipe(defaultRecipe)).thenReturn(defaultRecipe);
 
         var resultActions = mvc.perform(post("/recipes/default"));
 
-        verify(recipeRepository).save(defaultRecipe);
+        verify(recipeRepository).saveRecipe(defaultRecipe);
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().json(defaultRecipeJson, true));
@@ -123,7 +123,7 @@ public class RecipeControllerIntegrationTest {
         var recipeJson = om.writeValueAsString(recipe);
         var recipeWithId = DefaultRecipe.getInstance().withId(idToUpdate).build();
         var recipeWithIdJson = om.writeValueAsString(recipeWithId);
-        when(recipeRepository.save(recipeWithId)).thenReturn(recipeWithId);
+        when(recipeRepository.saveRecipe(recipeWithId)).thenReturn(recipeWithId);
 
         var resultActions = mvc.perform(
                 put(String.format("/recipes/%s", idToUpdate))
@@ -131,7 +131,7 @@ public class RecipeControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
-        verify(recipeRepository).save(captor.capture());
+        verify(recipeRepository).saveRecipe(captor.capture());
         var capturedRecipe = captor.getValue();
         assertThat(capturedRecipe).isEqualTo(recipeWithId);
         assertThat(capturedRecipe.getId()).isEqualTo(idToUpdate);

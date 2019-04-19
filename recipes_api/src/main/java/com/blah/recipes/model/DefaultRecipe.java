@@ -2,6 +2,7 @@ package com.blah.recipes.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.blah.recipes.model.Preparation.Method;
 import static com.blah.recipes.model.Preparation.Style;
@@ -12,6 +13,8 @@ public class DefaultRecipe {
     private List<Ingredient> ingredients = new ArrayList<>();
     private String id;
     private String name = "Cheese Omlette";
+    private Optional<String> rawImageBase64 = Optional.empty();
+    private Optional<String> imageUrl = Optional.of("http://google.com");
 
     public static DefaultRecipe getInstance() {
         return new DefaultRecipe();
@@ -29,6 +32,21 @@ public class DefaultRecipe {
 
     public DefaultRecipe withName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public DefaultRecipe withRawImageBase64(String rawImageBase64) {
+        this.rawImageBase64 = Optional.of(rawImageBase64);
+        return this;
+    }
+
+    public DefaultRecipe withNoImageUrl() {
+        this.imageUrl = Optional.empty();
+        return this;
+    }
+
+    public DefaultRecipe withImageUrl(String imageUrl) {
+        this.imageUrl = Optional.of(imageUrl);
         return this;
     }
 
@@ -58,6 +76,8 @@ public class DefaultRecipe {
 
         var recipe = new Recipe(this.name, this.ingredients, instructions);
         recipe.setId(this.id);
+        recipe.setRawImageBase64(this.rawImageBase64);
+        recipe.setImageUrl(this.imageUrl);
 
         return recipe;
     }

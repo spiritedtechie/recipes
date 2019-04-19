@@ -44,13 +44,13 @@ public class RecipeController {
             return recipes.get(0);
         }
         LOGGER.info("Default recipe not found. Adding to the database.");
-        return this.recipeRepository.save(recipe);
+        return this.recipeRepository.saveRecipe(recipe);
     }
 
     @RequestMapping(value = "/recipes", method = RequestMethod.POST)
     public Recipe newRecipe(@RequestBody Recipe recipe) {
         LOGGER.info("newRecipe " + recipe);
-        return recipeRepository.save(recipe);
+        return recipeRepository.saveRecipe(recipe);
     }
 
     @RequestMapping(value = "/recipes/{id}", method = RequestMethod.PUT)
@@ -58,7 +58,7 @@ public class RecipeController {
         LOGGER.info("updateRecipe " + id);
         validateId(id);
         recipe.setId(id);
-        return recipeRepository.save(recipe);
+        return recipeRepository.saveRecipe(recipe);
     }
 
     @RequestMapping(value = "/recipes/{id}", method = RequestMethod.DELETE)
