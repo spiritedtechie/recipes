@@ -2,12 +2,14 @@ import React from 'react';
 import './App.css';
 import Main from "./components/main/Main"
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import reducer from './components/recipe-edit/recipeEditReducer'
+import { combineReducers, createStore } from 'redux';
+import recipeEdit from './components/recipe-edit/recipeEditReducer'
+import recipeList from './components/recipe-list/recipeListReducer'
 
 const App = () => {
 
-    const store = createStore(reducer);
+    const combined = combineReducers({recipeList, recipeEdit})
+    const store = createStore(combined);
 
     return (
         <Provider store={store}>

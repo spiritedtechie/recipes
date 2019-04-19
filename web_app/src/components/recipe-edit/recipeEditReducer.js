@@ -14,8 +14,7 @@ const initialState = {
     saving_flag: false
 };
 
-const reducer = (state = initialState, action) => {
-    console.log(action)
+const reducer = (state=initialState, action) => {
     return produce(state, draft => {
         // eslint-disable-next-line
         switch(action.type) {

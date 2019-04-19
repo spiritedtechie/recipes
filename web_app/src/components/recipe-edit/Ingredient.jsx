@@ -159,9 +159,9 @@ const Ingredient = (props) => {
 
 function mapStateToProps(state, props) {
     return {
-        possibleUnits: state.ingredient_quantity_units,
-        possiblePreparationMethods: state.ingredient_preparation_methods,
-        possiblePreparationStyles: state.ingredient_preparation_styles
+        possibleUnits: state.recipeEdit.ingredient_quantity_units,
+        possiblePreparationMethods: state.recipeEdit.ingredient_preparation_methods,
+        possiblePreparationStyles: state.recipeEdit.ingredient_preparation_styles
     }
 }
 

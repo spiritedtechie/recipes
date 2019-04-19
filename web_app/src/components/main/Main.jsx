@@ -6,10 +6,6 @@ import RecipeList from "../recipe-list/RecipeList"
 
 class Main extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <HashRouter>

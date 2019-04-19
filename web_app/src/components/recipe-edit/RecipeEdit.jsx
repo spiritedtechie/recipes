@@ -3,19 +3,18 @@ import { connect } from 'react-redux';
 
 import Ingredient from "./Ingredient";
 import InstructionStep from "./InstructionStep";
-
-const recipeApiUrl = "http://localhost:8080"
+import { get, save, del } from "../common/HttpRest"
 
 class RecipeEdit extends Component {
     constructor(props) {
         super(props);
-        get(recipeApiUrl + "/ingredient/preparation/methods", (data) => {
+        get()("/ingredient/preparation/methods", (data) => {
             props.dispatch({ type: "SET_PREPARATION_METHODS_LOOKUPS", data: data });
         })
-        get(recipeApiUrl + "/ingredient/preparation/styles", (data) => {
+        get()("/ingredient/preparation/styles", (data) => {
             props.dispatch({ type: "SET_PREPARATION_STYLES_LOOKUPS", data: data });
         })
-        get(recipeApiUrl + "/ingredient/quantity/units", (data) => {
+        get()("/ingredient/quantity/units", (data) => {
             props.dispatch({ type: "SET_QUANTITY_UNITS_LOOKUP", data: data });
         })
 
@@ -34,16 +33,16 @@ class RecipeEdit extends Component {
         const recipeJson = JSON.stringify(recipe)
 
         if (recipe.id) {
-            save("PUT",
-                 recipeApiUrl + "/recipes/" + recipe.id,
+            save()("/recipes/" + recipe.id,
+                 "PUT",
                  recipeJson,
                  (data) => {
                     this.props.dispatch({ type: "RECIPE_SAVED", data: data });
                  }
             )
         } else {
-            save("POST",
-                 recipeApiUrl + "/recipes",
+            save()("/recipes",
+                "POST",
                  recipeJson,
                  (data) => {
                     this.props.dispatch({ type: "RECIPE_SAVED", data: data });
@@ -56,7 +55,7 @@ class RecipeEdit extends Component {
         e.preventDefault();
 
         if (this.props.recipe.id) {
-            del(recipeApiUrl + "/recipes/" + this.props.recipe.id,
+            del()("/recipes/" + this.props.recipe.id,
                    data => {
                       this.props.dispatch({ type: "RECIPE_DELETED" });
                    }
@@ -197,50 +196,11 @@ class RecipeEdit extends Component {
     }
 }
 
-const get = (url, callback) => {
-    fetch(url, {
-        method: "GET",
-        headers: {
-            Accept: "application/json",
-        }
-    }).then(response => {
-        response.json().then(data => {
-            callback(data)
-        });
-    });
-}
-
-const save = (method, url, body, callback) => {
-    fetch(url, {
-        method: method,
-        body: body,
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-        }
-    }).then(response => {
-        response.json().then(data => {
-            callback(data)
-        });
-    });
-}
-
-const del = (url, callback) => {
-   fetch(url, {
-       method: "DELETE",
-       headers: {
-           Accept: "application/json",
-       }
-   }).then(response => {
-       callback()
-   });
-}
-
 function mapStateToProps(state) {
     return {
-        recipe: state.recipe,
-        saving: state.saving_flag
-    };
+        recipe: state.recipeEdit.recipe,
+        saving: state.recipeEdit.saving_flag
+    }
 }
 
 export default connect(mapStateToProps)(RecipeEdit);
