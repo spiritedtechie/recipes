@@ -10,7 +10,7 @@
 
     <properties>
         <awsAccountId>274158739358</awsAccountId>
-        <spring.version>2.1.1.RELEASE</spring.version>
+        <spring.version>2.1.4.RELEASE</spring.version>
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -41,7 +41,7 @@
                  Preferable over a inherited Spring Boot parent pom -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.1.1.RELEASE</version>
+                <version>${spring.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -85,12 +85,12 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-core</artifactId>
-            <version>1.11.470</version>
+            <version>1.11.536</version>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-dynamodb</artifactId>
-            <version>1.11.470</version>
+            <version>1.11.536</version>
         </dependency>
 
         <!-- Test dependencies -->
@@ -101,7 +101,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>DynamoDBLocal</artifactId>
-            <version>1.11.119</version>
+            <version>1.11.477</version>
             <scope>test</scope>
         </dependency>
         <dependency>
