@@ -136,7 +136,6 @@ public class Recipe {
         return "Recipe{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", rawImageBase64=" + rawImageBase64 +
                 ", imageUrl=" + imageUrl +
                 ", ingredients=" + ingredients +
                 ", instructions=" + instructions +
