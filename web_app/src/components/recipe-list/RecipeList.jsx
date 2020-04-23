@@ -14,14 +14,26 @@ class RecipeList extends Component {
         )
     }
 
+    renderImagePreview = (image) => {
+        if (image) {
+          return (<img className="image" alt="image" src={image} />);
+        } else {
+          return (<div className="text">Image unavailable</div>);
+        }
+    }
+
     renderRecipes = (recipes) => {
         if (recipes) {
-            return recipes.map((recipe, index) => (
-                <div className="recipe"
-                     key={index}>
-                    <p>{recipe.name}</p>
-                </div>
-            ));
+            return recipes.map((recipe, index) => {
+                const image = this.renderImagePreview(recipe.imageUrl)
+                return (
+                    <div className="recipe"
+                        key={index}>
+                        <div className="picture">{image}</div>
+                        <div className="name">{recipe.name}</div>
+                    </div>
+                )
+            });
         }
     }
 

@@ -78,3 +78,39 @@
     background-size: 20px;
     background-position: center;
 }
+
+.recipes {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.recipes .recipe {
+    width: 200px;
+    margin: 10px;
+}
+
+.recipes .recipe .picture {
+    height: 200px;
+}
+
+.recipes .recipe .picture .image {
+    width: 200px;
+    height: 200px;
+    object-fit: scale-down;
+    display: block;
+    margin: 0 auto;
+}
+
+.recipes .recipe .picture .text {
+    width: 180px;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0 auto;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.recipes .recipe .name {
+    font-weight: bold; 
+    text-align: center;
+}
